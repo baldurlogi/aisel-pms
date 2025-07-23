@@ -15,7 +15,12 @@ module.exports = [
     files: ['**/*.{ts,tsx,js,jsx}'],
     languageOptions: {
       parser: tsParser,
-      parserOptions: { ecmaVersion: 'latest', sourceType: 'module', project: ['./tsconfig.json'] },
+      parserOptions: {
+        ecmaVersion: 'latest',
+        sourceType: 'module',
+        project: ['./tsconfig.json'],
+        tsconfigRootDir: __dirname,
+      },
     },
     plugins: {
       '@typescript-eslint': ts,
@@ -25,7 +30,10 @@ module.exports = [
       n,
       prettier,
     },
-    settings: { react: { version: 'detect' } },
+    settings: {
+      react: { version: 'detect' },
+      'import/resolver': { typescript: {} },
+    },
     rules: {
       ...ts.configs.recommended.rules,
       ...react.configs.recommended.rules,
