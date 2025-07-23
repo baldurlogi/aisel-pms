@@ -1,0 +1,50 @@
+########################################
+#  Node / JS mono‑repo (frontend + API)
+########################################
+# Dependency folders
+node_modules/
+
+# Build artefacts
+dist/              # NestJS build output
+.next/             # Next.js build output
+.turbo/            # Turborepo cache (if you end up using it)
+coverage/
+.nyc_output/
+
+########################################
+#  Prisma
+########################################
+prisma/dev.db
+prisma/dev.db-journal
+.prisma/           # generated client (will be regenerated)
+
+########################################
+# Docker
+########################################
+# Everything in here is also valid for .dockerignore, but
+# keeping it in .gitignore ensures the repo stays clean.
+*.tar
+*.img
+docker-volume-*/   # named volumes you might mount locally
+
+########################################
+#  Environment & secrets
+########################################
+.env*              # but keep   →  !.env.example
+!.env.example
+
+########################################
+#  Logs & OS clutter
+########################################
+*.log
+npm-debug.log*
+yarn-debug.log*
+.DS_Store
+Thumbs.db
+
+########################################
+#  IDE / Editor cruft
+########################################
+.vscode/
+.idea/
+*.sw?

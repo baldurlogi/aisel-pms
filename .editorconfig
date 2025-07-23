@@ -1,0 +1,17 @@
+root = true
+
+[*]
+charset              = utf-8
+end_of_line          = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+# JavaScript / TypeScript (React, Next.js, NestJS, Prisma)
+[*.{js,jsx,ts,tsx}]
+indent_style = space
+indent_size  = 2
+
+# JSON, YAML, Markdown, Tailwind CSS config, Docker & Compose files
+[*.{json,yml,yaml,md,css,scss,html,env,dockerfile,Dockerfile}]
+indent_style = space
+indent_size  = 2
