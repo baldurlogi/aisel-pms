@@ -1,15 +1,22 @@
 {
+  "name": "asiel-pms",
+  "private": true,
   "scripts": {
     "lint": "eslint \"**/*.{js,jsx,ts,tsx}\" --max-warnings=0",
     "format": "prettier . --check",
     "format:write": "prettier . --write",
     "prepare": "husky"
   },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "packageManager": "pnpm@10.13.1",
   "devDependencies": {
     "@commitlint/cli": "^19.8.1",
     "@commitlint/config-conventional": "^19.8.1",
     "@tsconfig/node22": "^22.0.2",
+    "eslint-import-resolver-typescript": "^4.4.4",
     "husky": "^9.1.7",
     "lint-staged": "^16.1.2",
     "typescript": "^5.8.3"
