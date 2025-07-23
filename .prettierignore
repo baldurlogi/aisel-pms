@@ -1,0 +1,7 @@
+# Build
+dist
+.next
+coverage
+
+# Assets
+public
