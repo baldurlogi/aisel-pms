@@ -1,16 +1,25 @@
 import { Injectable } from '@nestjs/common';
 import { CreatePatientDto } from '../dto/create-patient.dto';
 import { UpdatePatientDto } from '../dto/update-patient.dto';
+import { PrismaService } from 'prisma/prisma.service';
 
 @Injectable()
 export class PatientsService {
+  constructor(private readonly prisma: PrismaService) {}
+
   create(createPatientDto: CreatePatientDto) {
     console.log('Creating patient with data:', createPatientDto);
-    return 'This action adds a new patient';
+    const { dob, ...rest } = createPatientDto;
+    return this.prisma.patient.create({
+      data: {
+        ...rest,
+        dob: new Date(dob),
+      },
+    });
   }
 
   findAll() {
-    return `This action returns all patients`;
+    return this.prisma.patient.findMany();
   }
 
   findOne(id: number) {
