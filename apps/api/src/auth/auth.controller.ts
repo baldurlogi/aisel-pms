@@ -1,22 +1,21 @@
 import { Controller, Get, Post, Body, UseGuards } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
-import { AuthGuard } from '@nestjs/passport';
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { AuthService } from './auth.service';
+import { LoginDto } from './dto/login.dto';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly jwtService: JwtService) {}
+  constructor(private readonly authService: AuthService) {}
 
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(JwtAuthGuard)
   @Get('protected')
   getProtected() {
     return { message: 'You accessed a protected route!' };
   }
 
   @Post('login')
-  login(@Body() body: { email: string }) {
-    const payload = { email: body.email, sub: 'user-id-123', role: 'USER' };
-    return {
-      access_token: this.jwtService.sign(payload),
-    };
+  async login(@Body() dto: LoginDto) {
+    console.log('🔐 Attempting to log in with:', dto);
+    return await this.authService.login(dto);
   }
 }

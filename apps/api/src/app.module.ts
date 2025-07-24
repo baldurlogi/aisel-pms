@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import appConfig from 'config/app.config';
-import { UsersController } from './users/users.controller';
+import { AdminController } from './users/users.controller';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -17,7 +17,7 @@ import { AuthModule } from './auth/auth.module';
     UsersModule,
     AuthModule,
   ],
-  controllers: [AppController, UsersController],
+  controllers: [AppController, AdminController],
   providers: [AppService],
 })
 export class AppModule {}
