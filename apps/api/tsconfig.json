@@ -22,5 +22,10 @@
       "config/*": ["src/config/*"]
     }
   },
-  "include": ["src/**/*.ts", "test/**/*", "prisma/**/*.ts", "test/jest.config.ts"]
+  "include": [
+    "src/**/*.ts",
+    "test/**/*",
+    "prisma/**/*.ts",
+    "test/jest.config.ts"
+  ]
 }

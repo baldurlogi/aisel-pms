@@ -25,14 +25,13 @@
 
 This is the backend API for the Asiel PMS system built with NestJS and Prisma. It provides authentication, patient management, and API documentation via Swagger.
 
-
 ## Description
 
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
 ## Project setup
 
-```bash
+````bash
 # Clone the repo
 git clone https://github.com/your-org/asiel-pms.git
 cd asiel-pms
@@ -58,14 +57,14 @@ $ pnpm run start:dev
 
 # production mode
 $ pnpm run start:prod
-```
+````
 
 ### ⚙️ 3. **Run the API**
 
-```md
+````md
 ## 🚀 Running the API
 
-```bash
+````bash
 # Start in dev mode
 pnpm -F api start:dev
 
@@ -124,7 +123,8 @@ If you are looking for a cloud-based platform to deploy your NestJS application,
 ```bash
 $ pnpm install -g @nestjs/mau
 $ mau deploy
-```
+````
+````
 
 With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
 

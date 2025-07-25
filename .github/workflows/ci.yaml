@@ -1,2 +1,38 @@
-#- name: Run E2E Tests
-#  run: pnpm -F api test:e2e
+name: CI
+
+on:
+  pull_request:
+    branches:
+      - '**'
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: ⬇️ Checkout code
+        uses: actions/checkout@v4
+
+      - name: 🟢 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - name: 📦 Install pnpm
+        run: npm install -g pnpm
+
+      - name: 📥 Install dependencies
+        run: pnpm install
+
+      - name: ✅ Lint
+        run: pnpm lint
+
+      - name: 🧪 Test
+        run: pnpm test
+
+      - name: 🛠️ Build
+        run: pnpm build
+
+      - name: Run E2E Tests
+        run: pnpm -F api test:e2e
