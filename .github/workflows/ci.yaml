@@ -20,7 +20,7 @@ jobs:
           --health-cmd pg_isready
           --health-interval 10s
           --health-timeout 5s
-          --health-retries 5
+          --health-retries 10
 
     env:
       DATABASE_URL: postgresql://johndoe:randompassword@db:5432/mydb?schema=public
@@ -29,18 +29,26 @@ jobs:
       - name: ⬇️ Checkout code
         uses: actions/checkout@v4
 
-      - name: Wait for Postgres
+      - name: Debug network to db
         run: |
-          sudo apt-get update && sudo apt-get install -y postgresql-client
+          ping -c 4 db
+          nc -zv db 5432 || echo "Port 5432 not open yet"
+
+      - name: Wait for Postgres health check
+        run: |
           for i in {1..30}; do
-            if pg_isready -h db -p 5432 -U johndoe; then
-              echo "Postgres is ready"
+            status=$(docker inspect --format='{{.State.Health.Status}}' ${{ job.services.db.id }})
+            echo "Postgres health status: $status"
+            if [ "$status" = "healthy" ]; then
+              echo "Postgres is healthy"
               break
-            else
-              echo "Waiting for Postgres to be ready..."
-              sleep 2
             fi
+            sleep 2
           done
+
+      - name: Print Postgres logs if not healthy
+        if: failure()
+        run: docker logs ${{ job.services.db.id }}
 
       - name: 📦 Setup pnpm
         uses: pnpm/action-setup@v4
