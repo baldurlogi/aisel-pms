@@ -28,6 +28,9 @@ jobs:
       #- name: ✅ Lint
       #  run: pnpm -F api lint
 
+      - name: Generate Prisma Client
+        run: pnpm --filter api prisma generate
+
       - name: 🧪 Test
         run: pnpm -F api test
 
