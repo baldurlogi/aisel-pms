@@ -33,7 +33,7 @@ jobs:
       - name: Wait for Postgres to be ready
         run: |
           for i in {1..30}; do
-            if pg_isready -h localhost -p 5432 -U johndoe; then
+            if pg_isready -h localhost -p 5432 -U johndoe -d mydb; then
               echo "Postgres is ready"
               break
             else
