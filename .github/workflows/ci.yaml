@@ -27,7 +27,7 @@ jobs:
 
     steps:
       - name: Run Prisma migrations
-        run: npx prisma migrate deploy --schema=apps/api/src/prisma/schema.prisma
+        run: npx prisma migrate deploy --schema=apps/api/prisma/schema.prisma
 
       - name: 📦 Setup pnpm
         uses: pnpm/action-setup@v4
