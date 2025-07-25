@@ -1,3 +1,3 @@
 export default {
-  schema: 'apps/api/prisma/schema.prisma',
+  schema: 'apps/api/src/prisma/schema.prisma',
 };
