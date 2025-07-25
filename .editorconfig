@@ -15,3 +15,8 @@ indent_size  = 2
 [*.{json,yml,yaml,md,css,scss,html,env,dockerfile,Dockerfile}]
 indent_style = space
 indent_size  = 2
+
+[.dockerignore]
+indent_style = space
+indent_size  = 2
+charset = utf-8

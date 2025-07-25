@@ -55,7 +55,14 @@ module.exports = [
     languageOptions: { globals: { jest: 'readonly', vi: 'readonly' } },
   },
   {
-    ignores: ['**/dist/**', '**/node_modules/**', 'prisma.config.mjs'],
+    ignores: [
+      '**/dist/**',
+      '**/node_modules/**',
+      '**/coverage/**',
+      '**/coverage-e2e/**',
+      '**/lcov-report/**',
+      'prisma.config.mjs',
+    ],
   },
   {
     files: ['**/*.ts', '**/*.tsx'],

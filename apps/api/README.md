@@ -21,6 +21,11 @@
   <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
   [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
+# Asiel PMS API
+
+This is the backend API for the Asiel PMS system built with NestJS and Prisma. It provides authentication, patient management, and API documentation via Swagger.
+
+
 ## Description
 
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
@@ -28,8 +33,19 @@
 ## Project setup
 
 ```bash
-$ pnpm install
-```
+# Clone the repo
+git clone https://github.com/your-org/asiel-pms.git
+cd asiel-pms
+
+# Install dependencies
+pnpm install
+
+# Copy env file and edit if needed
+cp .env.example .env
+
+# Apply Prisma schema and seed if needed
+pnpm prisma generate
+pnpm prisma migrate dev
 
 ## Compile and run the project
 
@@ -44,18 +60,60 @@ $ pnpm run start:dev
 $ pnpm run start:prod
 ```
 
-## Run tests
+### ⚙️ 3. **Run the API**
+
+```md
+## 🚀 Running the API
 
 ```bash
-# unit tests
-$ pnpm run test
+# Start in dev mode
+pnpm -F api start:dev
 
-# e2e tests
-$ pnpm run test:e2e
+# Start in production
+pnpm -F api start:prod
 
-# test coverage
-$ pnpm run test:cov
-```
+### 🧪 4. **Testing Commands**
+
+```md
+## ✅ Testing
+
+```bash
+# Unit tests
+pnpm -F api test
+
+# E2E tests
+pnpm -F api test:e2e
+
+# Coverage
+pnpm -F api test:cov
+
+### 📚 5. **Swagger Documentation**
+
+```md
+## 📘 API Docs
+
+Once the API is running, visit: http://localhost:3000/api/docs
+This page is generated using `@nestjs/swagger` and lists all available endpoints.
+
+## 🔁 Common Commands
+
+| Command                        | Description                    |
+|-------------------------------|--------------------------------|
+| `pnpm -F api start:dev`       | Start server in watch mode     |
+| `pnpm -F api test`            | Run unit tests                 |
+| `pnpm -F api test:e2e`        | Run e2e tests                  |
+| `pnpm prisma studio`          | Browse database in web UI      |
+| `pnpm prisma migrate dev`     | Run latest DB migrations       |
+| `pnpm lint`                   | Fix lint issues                |
+
+## 🧱 Tech Stack
+
+- [NestJS](https://nestjs.com/)
+- [Prisma](https://www.prisma.io/)
+- [PostgreSQL](https://www.postgresql.org/)
+- [Swagger](https://swagger.io/)
+- [Jest](https://jestjs.io/)
+
 
 ## Deployment
 

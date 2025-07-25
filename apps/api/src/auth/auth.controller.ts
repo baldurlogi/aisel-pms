@@ -18,4 +18,14 @@ export class AuthController {
     console.log('🔐 Attempting to log in with:', dto);
     return await this.authService.login(dto);
   }
+
+  @Post('refresh')
+  async refresh(@Body() body: { userId: string; refreshToken: string }) {
+    return await this.authService.refresh(body.userId, body.refreshToken);
+  }
+
+  @Post('logout')
+  async logout(@Body() body: { userId: string }) {
+    return await this.authService.logout(body.userId);
+  }
 }

@@ -1,0 +1,2 @@
+#- name: Run E2E Tests
+#  run: pnpm -F api test:e2e
