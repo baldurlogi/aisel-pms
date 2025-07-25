@@ -26,21 +26,15 @@ jobs:
       DATABASE_URL: postgresql://johndoe:randompassword@localhost:5432/mydb?schema=public
 
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
       - name: Install postgresql client
         run: sudo apt-get update && sudo apt-get install -y postgresql-client
 
       - name: Run Prisma migrations
         working-directory: ./apps/api
         run: npx prisma migrate deploy --schema=src/prisma/schema.prisma
-
-      - name: 📦 Setup pnpm
-        uses: pnpm/action-setup@v4
-
-      - name: 🟢 Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: 'pnpm'
 
       - name: 📥 Install dependencies
         run: pnpm install
