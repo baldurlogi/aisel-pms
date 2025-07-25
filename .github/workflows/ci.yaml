@@ -31,6 +31,14 @@ jobs:
       - name: ⬇️ Checkout code
         uses: actions/checkout@v4
 
+      - name: Wait for Postgres to be ready
+        run: |
+          for i in {1..30}; do
+            pg_isready -h db -p 5432 && break
+            echo "Waiting for Postgres..."
+            sleep 2
+          done
+
       - name: 📦 Setup pnpm
         uses: pnpm/action-setup@v4
 
