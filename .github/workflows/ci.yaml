@@ -13,9 +13,7 @@ jobs:
       db:
         image: postgres:15
         env:
-          POSTGRES_USER: johndoe
-          POSTGRES_PASSWORD: randompassword
-          POSTGRES_DB: mydb
+          DATABASE_URL: postgresql://johndoe:randompassword@localhost:5432/mydb?schema=public
         options: >-
           --health-cmd "pg_isready --username=johndoe"
           --health-interval 10s
@@ -44,7 +42,7 @@ jobs:
 
       - name: List listening ports
         run: sudo netstat -tulnp | grep 5432 || ss -tulnp | grep 5432
-      
+
       - name: Test TCP port connectivity to Postgres
         run: nc -zv localhost 5432 || echo "Port 5432 not open"
 
