@@ -39,6 +39,15 @@ jobs:
       - name: Install postgresql client
         run: sudo apt-get update && sudo apt-get install -y postgresql-client
 
+      - name: Dump Postgres container logs
+        run: docker logs $(docker ps -q -f ancestor=postgres:15)
+
+      - name: List listening ports
+        run: sudo netstat -tulnp | grep 5432 || ss -tulnp | grep 5432
+      
+      - name: Test TCP port connectivity to Postgres
+        run: nc -zv localhost 5432 || echo "Port 5432 not open"
+
       - name: Wait for Postgres to be ready
         run: |
           for i in {1..30}; do
