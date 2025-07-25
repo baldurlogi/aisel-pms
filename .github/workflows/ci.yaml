@@ -25,16 +25,14 @@ jobs:
       - name: 📥 Install dependencies
         run: pnpm install
 
-      - run: pnpm ls eslint
-
       - name: ✅ Lint
-        run: pnpm lint
+        run: pnpm -F api lint
 
       - name: 🧪 Test
-        run: pnpm test
+        run: pnpm -F api test
 
       - name: 🛠️ Build
-        run: pnpm build
+        run: pnpm -F api build
 
       - name: Run E2E Tests
         run: pnpm -F api test:e2e
