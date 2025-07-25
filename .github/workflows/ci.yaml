@@ -17,23 +17,19 @@ jobs:
           POSTGRES_PASSWORD: randompassword
           POSTGRES_DB: mydb
         options: >-
-          --health-cmd "pg_isready --username=johndoe"
           --health-interval 10s
           --health-timeout 5s
           --health-retries 10
 
     env:
-      DATABASE_URL: postgresql://johndoe:randompassword@db:5432/mydb?schema=public
+      DATABASE_URL: postgresql://johndoe:randompassword@localhost:5432/mydb?schema=public
 
     steps:
-      - name: ⬇️ Checkout code
-        uses: actions/checkout@v4
-
       - name: Wait for Postgres to be ready
         run: |
           sudo apt-get update && sudo apt-get install -y postgresql-client
           for i in {1..30}; do
-            if pg_isready -h db -p 5432 -U johndoe; then
+            if pg_isready -h localhost -p 5432 --username=johndoe; then
               echo "Postgres is ready"
               break
             else
