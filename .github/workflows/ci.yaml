@@ -26,18 +26,8 @@ jobs:
       DATABASE_URL: postgresql://johndoe:randompassword@localhost:5432/mydb?schema=public
 
     steps:
-      - name: Wait for Postgres to be ready
-        run: |
-          sudo apt-get update && sudo apt-get install -y postgresql-client
-          for i in {1..30}; do
-            if pg_isready -h localhost -p 5432 --username=johndoe; then
-              echo "Postgres is ready"
-              break
-            else
-              echo "Waiting for Postgres to be ready..."
-              sleep 2
-            fi
-          done
+      - name: Run Prisma migrations
+        run: npx prisma migrate deploy --schema=apps/api/src/prisma/schema.prisma
 
       - name: 📦 Setup pnpm
         uses: pnpm/action-setup@v4
