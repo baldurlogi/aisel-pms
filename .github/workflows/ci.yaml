@@ -23,7 +23,7 @@ jobs:
           --health-retries 10
 
     env:
-      DATABASE_URL: postgresql://johndoe:randompassword@db:5432/mydb?schema=public
+      DATABASE_URL: postgresql://johndoe:randompassword@localhost:5432/mydb?schema=public
 
     steps:
       - name: Checkout code
@@ -35,7 +35,7 @@ jobs:
       - name: Wait for Postgres to be ready
         run: |
           for i in {1..30}; do
-            if pg_isready -h db -p 5432 -U johndoe; then
+            if pg_isready -h localhost -p 5432 -U johndoe; then
               echo "Postgres is ready"
               break
             else
