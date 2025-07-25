@@ -32,6 +32,10 @@ jobs:
       - name: Print DATABASE_URL for debugging
         run: echo $DATABASE_URL
 
+      - name: Show DB host
+        run: |
+          echo $DATABASE_URL | sed 's/postgresql:\/\/[^@]*@/postgresql:\/\/***@/'
+
       - name: Install postgresql client
         run: sudo apt-get update && sudo apt-get install -y postgresql-client
 
