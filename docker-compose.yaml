@@ -11,7 +11,7 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     ports:
-      - "5432:5432"
+      - '5432:5432'
 
   api:
     build:
@@ -20,7 +20,7 @@ services:
     depends_on:
       - db
     ports:
-      - "3000:3000"
+      - '3000:3000'
     env_file:
       - apps/api/.env
     volumes:
