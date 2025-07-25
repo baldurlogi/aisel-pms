@@ -22,9 +22,10 @@ jobs:
           node-version: 20
           cache: 'pnpm'
 
-
       - name: 📥 Install dependencies
         run: pnpm install
+
+      - run: pnpm ls eslint
 
       - name: ✅ Lint
         run: pnpm lint
