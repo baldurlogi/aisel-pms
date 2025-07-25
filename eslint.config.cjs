@@ -81,6 +81,7 @@ module.exports = [
     files: ['apps/api/src/**/*.ts'],
     rules: {
       'n/no-extraneous-import': 'off',
+      '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
     },
   },
 ];
