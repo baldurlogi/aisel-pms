@@ -55,5 +55,8 @@ jobs:
       - name: 🛠️ Build
         run: pnpm -F api build
 
+      - name: Print DATABASE_URL
+        run: echo $DATABASE_URL
+
       - name: Run E2E Tests
         run: pnpm -F api test:e2e
