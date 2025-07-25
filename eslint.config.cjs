@@ -34,7 +34,7 @@ module.exports = [
       react: { version: 'detect' },
       'import/resolver': {
         typescript: {
-          project: ['./apps/api/tsconfig.json'],
+          project: ['./apps/api/tsconfig.json', './tsconfig.json'],
         },
       },
     },
@@ -75,6 +75,12 @@ module.exports = [
     rules: {
       'n/no-missing-import': 'off',
       'n/no-missing-require': 'off',
+    },
+  },
+  {
+    files: ['apps/api/src/**/*.ts'],
+    rules: {
+      'n/no-extraneous-import': 'off',
     },
   },
 ];
