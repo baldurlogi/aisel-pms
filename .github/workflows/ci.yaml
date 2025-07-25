@@ -48,8 +48,10 @@ jobs:
       #- name: ✅ Lint
       #  run: pnpm -F api lint
 
+      
       - name: Generate Prisma Client
-        run: pnpm --filter api prisma generate
+        working-directory: ./apps/api
+        run: npx prisma generate --schema=src/prisma/schema.prisma
 
       - name: 🧪 Test
         run: pnpm -F api test
