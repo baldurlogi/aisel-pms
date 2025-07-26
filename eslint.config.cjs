@@ -92,7 +92,10 @@ module.exports = [
     },
   },
   {
-    files: ['apps/api/src/patients/patients.controller.ts', 'apps/web/src/components/PatientsList.tsx'],
+    files: [
+      'apps/api/src/patients/patients.controller.ts',
+      'apps/web/src/components/PatientsList.tsx',
+    ],
     rules: {
       '@typescript-eslint/no-explicit-any': 'off',
     },
