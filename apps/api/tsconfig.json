@@ -9,6 +9,7 @@
     "target": "ES2023",
     "sourceMap": true,
     "outDir": "./dist",
+    "rootDir": ".",
     "baseUrl": ".",
     "incremental": true,
     "skipLibCheck": true,
@@ -19,13 +20,15 @@
     "noFallthroughCasesInSwitch": false,
     "paths": {
       "config/*": ["src/config/*"],
-      "common/*": ["src/common/*"]
+      "common/*": ["src/common/*"],
+      "libs/*": ["../../libs/*"]
     }
   },
   "include": [
     "src/**/*.ts",
     "test/**/*",
     "prisma/**/*.ts",
-    "test/jest.config.ts"
+    "test/jest.config.ts",
+    "../../libs/dtos/**/*.ts",
   ]
 }

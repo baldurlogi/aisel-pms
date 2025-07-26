@@ -1,7 +1,16 @@
 export const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
 
+type QueryParams = Record<string, string | number | boolean>;
+
 export const api = {
-  get: <T>(path: string, options?: RequestInit) => request<T>(path, 'GET', undefined, options),
+  get: <T, P extends QueryParams = QueryParams>(
+    path: string,
+    params?: P,
+    options?: RequestInit,
+  ) => {
+    const queryString = params ? `?${serializeParams(params)}` : '';
+    return request<T>(`${path}${queryString}`, 'GET', undefined, options);
+  },
   post: <T>(path: string, data: unknown, options?: RequestInit) =>
     request<T>(path, 'POST', data, options),
   put: <T>(path: string, data: unknown, options?: RequestInit) =>
@@ -32,7 +41,7 @@ async function request<T = unknown>(
   });
 
   if (!res.ok) {
-    const error = await res.json().catch(() => ({}));
+    const error = await res.json().catch(() => ({}) as Record<string, unknown>);
 
     if (res.status === 401 && typeof window !== 'undefined') {
       window.location.href = '/login';
@@ -43,4 +52,12 @@ async function request<T = unknown>(
   }
 
   return res.json();
+}
+
+function serializeParams(params: Record<string, string | number | boolean>) {
+  const urlParams = new URLSearchParams();
+  Object.entries(params).forEach(([key, value]) => {
+    urlParams.append(key, String(value));
+  });
+  return urlParams.toString();
 }

@@ -13,3 +13,9 @@ export type CreatePatientDto = z.infer<typeof CreatePatientSchema>;
 export const UpdatePatientSchema = CreatePatientSchema.partial();
 
 export type UpdatePatientDto = z.infer<typeof UpdatePatientSchema>;
+
+export const PatientSchema = CreatePatientSchema.extend({
+  id: z.string(),
+});
+
+export type Patient = z.infer<typeof PatientSchema>;

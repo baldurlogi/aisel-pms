@@ -18,7 +18,7 @@ module.exports = [
       parserOptions: {
         ecmaVersion: 'latest',
         sourceType: 'module',
-        project: ['./tsconfig.eslint.json'],
+        projectService: true,
         tsconfigRootDir: __dirname,
       },
     },
@@ -75,6 +75,8 @@ module.exports = [
       '**/lcov-report/**',
       'prisma.config.mjs',
       '**/.next/**',
+      '**/*.d.ts',
+      '**/*.js',
     ],
   },
   {

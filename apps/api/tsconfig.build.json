@@ -1,4 +1,14 @@
 {
   "extends": "./tsconfig.json",
-  "exclude": ["node_modules", "test", "dist", "**/*spec.ts"]
+  "compilerOptions": {
+    "outDir": "./dist",
+    // Remove or set rootDir to the monorepo root or a common parent folder
+    "rootDir": "../../",
+    "composite": false
+  },
+  "include": [
+    "src/**/*",
+    "../../libs/dtos/**/*"
+  ],
+  "exclude": ["node_modules", "dist", "**/*.spec.ts"]
 }

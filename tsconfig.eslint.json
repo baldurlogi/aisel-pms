@@ -1,4 +1,9 @@
 {
   "extends": "./tsconfig.json",
-  "include": ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx", "eslint.config.cjs", "libs/**/*.ts"]
+  "include": ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx", "eslint.config.cjs", "libs/**/*.ts", "libs/**/*.d.ts"],
+  "references": [
+    { "path": "./apps/web/tsconfig.json" },
+    { "path": "./apps/api/tsconfig.json" },
+    { "path": "./libs/dtos/tsconfig.json" }
+  ]
 }
