@@ -1,5 +1,3 @@
-console.log('✅ next.config.js loaded');
-
 const nextConfig = {
   reactStrictMode: true,
 };

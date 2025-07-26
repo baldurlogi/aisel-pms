@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { CreatePatientDto } from '../dto/create-patient.dto';
-import { UpdatePatientDto } from '../dto/update-patient.dto';
+import {
+  CreatePatientDto,
+  UpdatePatientDto,
+} from '../../../../libs/dtos/patient.schema';
 import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
@@ -9,11 +11,12 @@ export class PatientsService {
 
   create(createPatientDto: CreatePatientDto) {
     console.log('Creating patient with data:', createPatientDto);
-    const { dob, ...rest } = createPatientDto;
+    const { dob, phoneNumber, ...rest } = createPatientDto;
     return this.prisma.patient.create({
       data: {
         ...rest,
         dob: new Date(dob),
+        ...(phoneNumber !== undefined ? { phoneNumber } : {}),
       },
     });
   }

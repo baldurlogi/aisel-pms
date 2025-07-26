@@ -18,7 +18,7 @@ module.exports = [
       parserOptions: {
         ecmaVersion: 'latest',
         sourceType: 'module',
-        project: ['./apps/api/tsconfig.json', './apps/web/tsconfig.eslint.json'],
+        project: ['./tsconfig.eslint.json'],
         tsconfigRootDir: __dirname,
       },
     },
@@ -35,9 +35,9 @@ module.exports = [
       'import/resolver': {
         typescript: {
           project: [
+            './tsconfig.eslint.json',
+            './apps/web/tsconfig.json',
             './apps/api/tsconfig.json',
-            './tsconfig.json',
-            './apps/web/tsconfig.eslint.json',
           ],
         },
       },
@@ -89,6 +89,12 @@ module.exports = [
     rules: {
       'n/no-extraneous-import': 'off',
       '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+    },
+  },
+  {
+    files: ['apps/api/src/patients/patients.controller.ts', 'apps/web/src/components/PatientsList.tsx'],
+    rules: {
+      '@typescript-eslint/no-explicit-any': 'off',
     },
   },
 ];

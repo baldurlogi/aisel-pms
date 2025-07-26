@@ -6,11 +6,17 @@ import {
   Patch,
   Param,
   Delete,
+  UsePipes,
 } from '@nestjs/common';
 import { PatientsService } from '../patients/patients.service';
-import { CreatePatientDto } from '../dto/create-patient.dto';
-import { UpdatePatientDto } from '../dto/update-patient.dto';
 import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
+import { ZodValidationPipe } from '@anatine/zod-nestjs';
+import {
+  CreatePatientSchema,
+  CreatePatientDto,
+  UpdatePatientSchema,
+  UpdatePatientDto,
+} from '../../../../libs/dtos/patient.schema';
 
 @ApiTags('patients')
 @ApiBearerAuth()
@@ -19,8 +25,9 @@ export class PatientsController {
   constructor(private readonly patientsService: PatientsService) {}
 
   @Post()
-  create(@Body() createPatientDto: CreatePatientDto) {
-    return this.patientsService.create(createPatientDto);
+  @UsePipes(new (ZodValidationPipe as any)(CreatePatientSchema))
+  create(@Body() dto: CreatePatientDto) {
+    return this.patientsService.create(dto);
   }
 
   @Get()
@@ -34,8 +41,9 @@ export class PatientsController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePatientDto: UpdatePatientDto) {
-    return this.patientsService.update(+id, updatePatientDto);
+  @UsePipes(new (ZodValidationPipe as any)(UpdatePatientSchema))
+  update(@Param('id') id: string, @Body() dto: UpdatePatientDto) {
+    return this.patientsService.update(+id, dto);
   }
 
   @Delete(':id')
