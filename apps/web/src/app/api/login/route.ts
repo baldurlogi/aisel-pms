@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
       return new NextResponse('Invalid credentials', { status: 401 });
     }
 
-    const { access_token } = await res.json();
+    const { access_token, refresh_token, user_id } = await res.json();
     console.log('Access token received:', access_token);
 
     const response = NextResponse.json({ success: true });
@@ -32,6 +32,26 @@ export async function POST(req: NextRequest) {
       path: '/',
       sameSite: 'lax',
       maxAge: 60 * 60 * 24 * 7, // 7 days
+    });
+
+    response.cookies.set({
+      name: 'refresh_token',
+      value: refresh_token,
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      path: '/',
+      sameSite: 'strict',
+      maxAge: 60 * 60 * 24 * 30, // 30 days
+    });
+
+    response.cookies.set({
+      name: 'user_id',
+      value: user_id,
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      path: '/',
+      sameSite: 'strict',
+      maxAge: 60 * 60 * 24 * 30,
     });
 
     return response;

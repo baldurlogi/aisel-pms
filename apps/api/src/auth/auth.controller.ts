@@ -6,6 +6,7 @@ import {
   UseGuards,
   Res,
   Req,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { AuthService } from './auth.service';
@@ -30,8 +31,15 @@ export class AuthController {
   }
 
   @Post('refresh')
-  async refresh(@Body() body: { userId: string; refreshToken: string }) {
-    return await this.authService.refresh(body.userId, body.refreshToken);
+  async refresh(@Req() req) {
+    const refreshToken = req.cookies?.refresh_token;
+    const userId = req.cookies?.user_id;
+
+    if (!refreshToken || !userId) {
+      throw new UnauthorizedException('Missing refresh credentials');
+    }
+
+    return await this.authService.refresh(userId, refreshToken);
   }
 
   @Post('logout')

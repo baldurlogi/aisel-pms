@@ -13,9 +13,9 @@ jobs:
       db:
         image: postgres:15
         env:
-            POSTGRES_USER: johndoe
-            POSTGRES_PASSWORD: randompassword
-            POSTGRES_DB: mydb
+          POSTGRES_USER: johndoe
+          POSTGRES_PASSWORD: randompassword
+          POSTGRES_DB: mydb
         options: >-
           --health-cmd "pg_isready --username=johndoe"
           --health-interval 10s
@@ -28,7 +28,6 @@ jobs:
 
       - name: Install postgresql client
         run: sudo apt-get update && sudo apt-get install -y postgresql-client
-
 
       - name: Wait for Postgres to be ready
         run: |

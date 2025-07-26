@@ -34,7 +34,11 @@ module.exports = [
       react: { version: 'detect' },
       'import/resolver': {
         typescript: {
-          project: ['./apps/api/tsconfig.json', './tsconfig.json', './apps/web/tsconfig.eslint.json'],
+          project: [
+            './apps/api/tsconfig.json',
+            './tsconfig.json',
+            './apps/web/tsconfig.eslint.json',
+          ],
         },
       },
     },
