@@ -21,8 +21,23 @@ export class PatientsService {
     });
   }
 
-  findAll() {
-    return this.prisma.patient.findMany();
+  findAll(search?: string) {
+    const trimmed = search?.trim();
+    console.log('Hello');
+
+    if (trimmed) {
+      console.log('🔍 Searching for:', trimmed);
+      return this.prisma.patient.findMany({
+        where: {
+          OR: [
+            { firstName: { contains: trimmed, mode: 'insensitive' } },
+            { lastName: { contains: trimmed, mode: 'insensitive' } },
+            { email: { contains: trimmed, mode: 'insensitive' } },
+          ],
+        },
+      });
+    }
+    return this.prisma.patient.findMany(); // no filter
   }
 
   findOne(id: number) {

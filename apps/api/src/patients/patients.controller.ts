@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   UsePipes,
+  Query,
 } from '@nestjs/common';
 import { PatientsService } from '../patients/patients.service';
 import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
@@ -31,8 +32,8 @@ export class PatientsController {
   }
 
   @Get()
-  findAll() {
-    return this.patientsService.findAll();
+  findAll(@Query('search') search?: string) {
+    return this.patientsService.findAll(search);
   }
 
   @Get(':id')
