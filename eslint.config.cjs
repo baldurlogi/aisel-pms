@@ -18,7 +18,7 @@ module.exports = [
       parserOptions: {
         ecmaVersion: 'latest',
         sourceType: 'module',
-        project: ['./apps/api/tsconfig.json'],
+        project: ['./apps/api/tsconfig.json', './apps/web/tsconfig.eslint.json'],
         tsconfigRootDir: __dirname,
       },
     },
@@ -34,7 +34,7 @@ module.exports = [
       react: { version: 'detect' },
       'import/resolver': {
         typescript: {
-          project: ['./apps/api/tsconfig.json', './tsconfig.json'],
+          project: ['./apps/api/tsconfig.json', './tsconfig.json', './apps/web/tsconfig.eslint.json'],
         },
       },
     },
@@ -53,6 +53,8 @@ module.exports = [
       '@typescript-eslint/no-unsafe-assignment': 'off',
       '@typescript-eslint/no-unsafe-return': 'off',
       '@typescript-eslint/no-unsafe-argument': 'off',
+      'react/react-in-jsx-scope': 'off', // Not needed with React 17+
+      '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
     },
   },
   // Jest / vitest tests
@@ -68,6 +70,7 @@ module.exports = [
       '**/coverage-e2e/**',
       '**/lcov-report/**',
       'prisma.config.mjs',
+      '**/.next/**',
     ],
   },
   {

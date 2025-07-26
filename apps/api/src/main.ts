@@ -12,7 +12,8 @@ async function bootstrap() {
   app.use(helmet());
 
   app.enableCors({
-    origin: '*',
+    origin: 'http://localhost:3000',
+    credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
   });
@@ -29,7 +30,7 @@ async function bootstrap() {
   app.useGlobalGuards(new RolesGuard(reflector));
 
   const config = app.get(ConfigService);
-  const port = config.get<number>('port') ?? 3000;
+  const port = config.get<number>('port') ?? 4000;
 
   const configSwagger = new DocumentBuilder()
     .setTitle('API Documentation')
