@@ -1,6 +1,7 @@
 'use client';
 
 import type { Patient } from '../../../../../libs/dtos/patient.schema';
+import { PatientsDrawer } from '@/components/PatientsDrawer';
 import {
   Table,
   TableBody,
@@ -11,8 +12,12 @@ import {
 } from '@/components/ui/table';
 import { api } from '@/lib/api';
 import { useQuery } from '@tanstack/react-query';
+import { useState } from 'react';
 
 export default function PatientsList() {
+  const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+
   const { data, isLoading, error } = useQuery<Patient[]>({
     queryKey: ['patients'],
     queryFn: () => api.get<Patient[]>('/patients'),
@@ -40,7 +45,14 @@ export default function PatientsList() {
           </TableHeader>
           <TableBody>
             {data.map(patient => (
-              <TableRow key={patient.id}>
+              <TableRow
+                key={patient.id}
+                onClick={() => {
+                  setSelectedPatient(patient);
+                  setDrawerOpen(true);
+                }}
+                className="cursor-pointer hover:bg-muted"
+              >
                 <TableCell>{patient.firstName}</TableCell>
                 <TableCell>{patient.lastName}</TableCell>
                 <TableCell>{patient.email}</TableCell>
@@ -51,6 +63,12 @@ export default function PatientsList() {
           </TableBody>
         </Table>
       </div>
+
+      <PatientsDrawer
+        patient={selectedPatient}
+        open={drawerOpen}
+        onClose={() => setDrawerOpen(false)}
+      />
     </div>
   );
 }

@@ -29,6 +29,6 @@
     "test/**/*",
     "prisma/**/*.ts",
     "test/jest.config.ts",
-    "../../libs/dtos/**/*.ts",
+    "../../libs/dtos/**/*.ts"
   ]
 }

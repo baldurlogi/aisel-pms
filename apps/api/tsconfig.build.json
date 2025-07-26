@@ -6,9 +6,6 @@
     "rootDir": "../../",
     "composite": false
   },
-  "include": [
-    "src/**/*",
-    "../../libs/dtos/**/*"
-  ],
+  "include": ["src/**/*", "../../libs/dtos/**/*"],
   "exclude": ["node_modules", "dist", "**/*.spec.ts"]
 }
