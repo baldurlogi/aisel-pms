@@ -16,26 +16,38 @@ export class PatientsService {
       data: {
         ...rest,
         dob: new Date(dob),
-        ...(phoneNumber !== undefined ? { phoneNumber } : {}),
+        phoneNumber: phoneNumber ?? null,
       },
     });
   }
 
-  findAll(search?: string) {
-    const trimmed = search?.trim();
+  async findAll(search?: string, page = 1, limit = 10) {
+    const skip = (page - 1) * limit;
 
-    if (trimmed) {
-      return this.prisma.patient.findMany({
-        where: {
+    const where = search?.trim()
+      ? {
           OR: [
-            { firstName: { contains: trimmed, mode: 'insensitive' } },
-            { lastName: { contains: trimmed, mode: 'insensitive' } },
-            { email: { contains: trimmed, mode: 'insensitive' } },
+            { firstName: { contains: search, mode: 'insensitive' as const } },
+            { lastName: { contains: search, mode: 'insensitive' as const } },
+            { email: { contains: search, mode: 'insensitive' as const } },
           ],
-        },
-      });
-    }
-    return this.prisma.patient.findMany(); // no filter
+        }
+      : {};
+
+    const [patients, total] = await Promise.all([
+      this.prisma.patient.findMany({
+        where,
+        skip,
+        take: limit,
+        orderBy: { createdAt: 'desc' },
+      }),
+      this.prisma.patient.count({ where }),
+    ]);
+
+    return {
+      data: patients,
+      total,
+    };
   }
 
   findOne(id: string) {

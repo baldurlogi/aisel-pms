@@ -1,6 +1,7 @@
 'use client';
 
 import type { Patient } from '../../../../../libs/dtos/patient.schema';
+import { LogoutAlertDialog } from '@/components/LogoutAlertDialog';
 import { PatientForm } from '@/components/PatientForm';
 import { PatientsDrawer } from '@/components/PatientsDrawer';
 import TableSkeleton from '@/components/TableSkeleton';
@@ -32,6 +33,9 @@ export default function PatientsList() {
   const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
 
+  const [page, setPage] = useState(1);
+  const limit = 10;
+
   const [open, setOpen] = useState(false);
 
   const router = useRouter();
@@ -42,10 +46,20 @@ export default function PatientsList() {
 
   const { theme, toggle } = useTheme();
 
-  const { data, isLoading, error, refetch } = useQuery<Patient[]>({
-    queryKey: ['patients', debouncedSearch],
+  const { data, isLoading, error, refetch } = useQuery<{
+    data: Patient[];
+    total: number;
+  }>({
+    queryKey: ['patients', debouncedSearch, page],
     queryFn: () =>
-      api.get<Patient[]>(`/patients${debouncedSearch ? `?search=${debouncedSearch}` : ''}`),
+      api.get<{
+        data: Patient[];
+        total: number;
+      }>('/patients', {
+        search: debouncedSearch,
+        page,
+        limit,
+      }),
   });
 
   if (isLoading) return <TableSkeleton rows={6} columns={5} />;
@@ -57,13 +71,16 @@ export default function PatientsList() {
       <div className="p-4">
         <div className="flex justify-between items-center mb-4">
           <h1 className="text-2xl font-bold mb-4">Patients</h1>
-          <Button
-            onClick={toggle}
-            variant="outline"
-            className="text-sm px-3 py-2 rounded mg-muted bg-primary text-white dark:hover:bg-gray-200 dark:hover:text-zinc-900"
-          >
-            {theme === 'dark' ? '🌙 Dark' : '☀️ Light'}
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button
+              onClick={toggle}
+              variant="outline"
+              className="text-sm px-3 py-2 rounded mg-muted bg-primary text-white dark:hover:bg-gray-200 dark:hover:text-zinc-900"
+            >
+              {theme === 'dark' ? '🌙 Dark' : '☀️ Light'}
+            </Button>
+            <LogoutAlertDialog />
+          </div>
         </div>
         <div className="flex justify-between items-center mb-4">
           <Input
@@ -119,8 +136,8 @@ export default function PatientsList() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {data && data.length > 0 ? (
-                data.map(patient => (
+              {data && data?.data.length > 0 ? (
+                data?.data.map(patient => (
                   <TableRow
                     key={patient.id}
                     onClick={() => {
@@ -147,9 +164,9 @@ export default function PatientsList() {
           </Table>
 
           {/* Cards – visible only on mobile */}
-          {data && data.length > 0 ? (
+          {data && data?.data.length > 0 ? (
             <div className="block md:hidden space-y-4">
-              {data.map(patient => (
+              {data?.data.map(patient => (
                 <div
                   key={patient.id}
                   onClick={() => {
@@ -172,6 +189,26 @@ export default function PatientsList() {
               No patient{search.trim() ? `s matching “${search}”` : 's'} found.
             </p>
           )}
+
+          <div className="flex justify-center mt-6 space-x-4">
+            <Button
+              variant="outline"
+              disabled={page === 1}
+              onClick={() => setPage(p => Math.max(p - 1, 1))}
+            >
+              Previous
+            </Button>
+            <span className="text-sm text-muted-foreground">
+              Page {page} of {Math.ceil((data?.total ?? 0) / limit)}
+            </span>
+            <Button
+              variant="outline"
+              disabled={page >= Math.ceil((data?.total || 0) / limit)}
+              onClick={() => setPage(p => Math.min(p + 1, Math.ceil((data?.total || 0) / limit)))}
+            >
+              Next
+            </Button>
+          </div>
 
           <PatientsDrawer
             patient={selectedPatient}
