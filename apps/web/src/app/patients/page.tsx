@@ -93,7 +93,7 @@ export default function PatientsList() {
           </Dialog>
         </div>
         <div className="overflow-x-auto">
-          <Table>
+          <Table className="hidden md:block overflow-x-auto">
             <TableHeader>
               <TableRow>
                 <TableHead>First Name</TableHead>
@@ -130,6 +130,33 @@ export default function PatientsList() {
               )}
             </TableBody>
           </Table>
+
+          {/* Cards – visible only on mobile */}
+          {data && data.length > 0 ? (
+            <div className="block md:hidden space-y-4">
+              {data.map(patient => (
+                <div
+                  key={patient.id}
+                  onClick={() => {
+                    setSelectedPatient(patient);
+                    setDrawerOpen(true);
+                  }}
+                  className="p-4 border rounded-lg shadow cursor-pointer bg-white hover:bg-muted"
+                >
+                  <h2 className="font-semibold">
+                    {patient.firstName} {patient.lastName}
+                  </h2>
+                  <p className="text-sm text-muted-foreground">{patient.email}</p>
+                  <p className="text-sm">{patient.phoneNumber || '-'}</p>
+                  <p className="text-sm">{new Date(patient.dob).toLocaleDateString()}</p>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="md:hidden text-center py-8 italic text-muted-foreground">
+              No patient{search.trim() ? `s matching “${search}”` : 's'} found.
+            </p>
+          )}
 
           <PatientsDrawer
             patient={selectedPatient}

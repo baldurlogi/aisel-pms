@@ -21,7 +21,7 @@ export default function LoginPage() {
     });
 
     if (res.ok) {
-      router.push('/dashboard'); // or home
+      router.push('/patients'); // or home
     } else {
       setError('Invalid credentials');
     }
