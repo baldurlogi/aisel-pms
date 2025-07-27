@@ -1,9 +1,9 @@
 'use client';
 
-import type { Patient } from '../../../../libs/dtos/patient.schema';
 import TableSkeleton from '@/components/TableSkeleton';
 import { api } from '@/lib/api';
 import { useQuery } from '@tanstack/react-query';
+import type { Patient } from 'libs/dtos/patient.schema';
 import { useState } from 'react';
 
 export default function PatientsList() {

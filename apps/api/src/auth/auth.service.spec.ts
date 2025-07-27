@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { AuthService } from './auth.service';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from '../prisma/prisma.service';
-import * as bcrypt from 'bcrypt';
+import * as bcrypt from 'bcryptjs';
 
 describe('AuthService', () => {
   let service: AuthService;
@@ -45,9 +45,7 @@ describe('AuthService', () => {
         role: 'USER',
       };
       mockPrismaService.user.findUnique.mockResolvedValue(user);
-      jest.spyOn(bcrypt, 'compare').mockImplementation((_password, _hash) => {
-        return Promise.resolve(true);
-      });
+      (jest.spyOn(bcrypt, 'compare') as jest.Mock).mockResolvedValue(true);
 
       const result = await service.validateUser('test@example.com', 'password');
       expect(result).toEqual({
@@ -67,11 +65,14 @@ describe('AuthService', () => {
     });
 
     it('should return null if password mismatch', async () => {
-      const user = { password: 'hashed-password' };
+      const user = {
+        id: '1',
+        email: 'test@example.com',
+        password: 'hashed-password',
+        role: 'USER',
+      };
       mockPrismaService.user.findUnique.mockResolvedValue(user);
-      jest.spyOn(bcrypt, 'compare').mockImplementation((_password, _hash) => {
-        return Promise.resolve(false);
-      });
+      (jest.spyOn(bcrypt, 'compare') as jest.Mock).mockResolvedValue(false);
 
       const result = await service.validateUser(
         'test@example.com',
@@ -80,6 +81,5 @@ describe('AuthService', () => {
       expect(result).toBeNull();
     });
   });
-
   // Add more tests for login, refresh, etc. similarly...
 });

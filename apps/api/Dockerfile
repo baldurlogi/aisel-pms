@@ -1,54 +1,72 @@
 # ---------- STAGE 1: Build ----------
 FROM node:20-alpine AS builder
 
-ENV HUSKY=0
-
+RUN corepack enable && corepack prepare pnpm@latest --activate
 WORKDIR /app
 
-# Copy root package files
-COPY package*.json ./
-COPY tsconfig*.json ./
-COPY apps/api/nest-cli.json ./apps/api/nest-cli.json
+# Copy monorepo workspace files first
+COPY pnpm-workspace.yaml ./
+COPY pnpm-lock.yaml ./
+COPY .env ./
 
-# Copy app-specific package.json
-COPY apps/api/package.json ./apps/api/
+# Copy all package.json files to understand the full dependency tree
+COPY package.json* ./
+COPY apps/api/package.json ./apps/api/package.json
+COPY apps/web/package.json ./apps/web/package.json
 
-# Copy other needed folders
-COPY apps/api/src/prisma ./apps/api/src/prisma
+# Install all dependencies using pnpm (supports monorepo)
+RUN pnpm install --frozen-lockfile
 
-# Install all dependencies (root + shared + app-specific)
-RUN npm install
-
-RUN npx prisma generate
-
-# Copy full source code
+# Copy the rest of the source code (dockerignore will exclude unwanted files)
+# This includes any libs/ folder and other shared code
 COPY . .
 
-# Build only the API app
+# Generate Prisma client from root (monorepo style)
+RUN pnpm --filter api prisma generate --schema=apps/api/src/prisma/schema.prisma
+
+# Move to API directory for building
 WORKDIR /app/apps/api
-RUN npm run build
+
+# Build the NestJS project
+RUN pnpm build
 
 
 # ---------- STAGE 2: Runtime ----------
 FROM node:20-alpine AS production
 
 ENV NODE_ENV=production
-ENV HUSKY=0
+
+# Enable pnpm
+# Enable pnpm and install required build tools + openssl
+RUN corepack enable && corepack prepare pnpm@latest --activate \
+    && apk add --no-cache make g++ python3 openssl
+
 WORKDIR /app
 
-# Copy package files and install only prod deps
-COPY package*.json ./
-COPY apps/api/package.json ./apps/api/
-RUN npm install --omit=dev
-COPY apps/api/.env .env
+# Copy monorepo files
+COPY pnpm-workspace.yaml ./
+COPY pnpm-lock.yaml ./
+COPY .env ./
 
-# Copy Prisma schema before generating client
-COPY --from=builder /app/apps/api/src/prisma ./prisma
+# Copy all package.json files
+COPY package.json* ./
+COPY apps/api/package.json ./apps/api/package.json
 
-RUN npx prisma generate --schema=./prisma/schema.prisma
+# Install ALL dependencies (including dev) to have Prisma CLI available
+RUN pnpm install --frozen-lockfile
 
-# Copy built app
+# Switch to API directory
+WORKDIR /app/apps/api
+
+# Copy build artifacts
 COPY --from=builder /app/apps/api/dist ./dist
+COPY --from=builder /app/apps/api/src/prisma ./src/prisma
+
+# Generate Prisma client directly in production stage
+RUN cd /app && pnpm --filter api prisma generate --schema=apps/api/src/prisma/schema.prisma
+
+# Clean up dev dependencies to reduce image size
+RUN pnpm install --prod --frozen-lockfile
 
 EXPOSE 4000
-CMD ["node", "dist/main.js"]
+CMD ["node", "dist/apps/api/src/main.js"]

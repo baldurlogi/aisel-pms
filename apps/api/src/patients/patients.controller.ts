@@ -17,7 +17,7 @@ import {
   CreatePatientDto,
   UpdatePatientSchema,
   UpdatePatientDto,
-} from '../../../../libs/dtos/patient.schema';
+} from 'libs/dtos/patient.schema';
 
 @ApiTags('patients')
 @ApiBearerAuth()

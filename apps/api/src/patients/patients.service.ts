@@ -1,8 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import {
-  CreatePatientDto,
-  UpdatePatientDto,
-} from '../../../../libs/dtos/patient.schema';
+import { CreatePatientDto, UpdatePatientDto } from 'libs/dtos/patient.schema';
 import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()

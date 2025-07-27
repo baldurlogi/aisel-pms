@@ -1,6 +1,5 @@
 'use client';
 
-import type { Patient } from '../../../../libs/dtos/patient.schema';
 import { PatientForm } from './PatientForm';
 import {
   AlertDialog,
@@ -21,6 +20,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { api } from '@/lib/api';
+import type { Patient } from 'libs/dtos/patient.schema';
 
 type Props = {
   patient: Patient | null;

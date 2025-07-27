@@ -1,9 +1,9 @@
 'use client';
 
-import { CreatePatientDto, CreatePatientSchema } from '../../../../libs/dtos/patient.schema';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { CreatePatientDto, CreatePatientSchema } from 'libs/dtos/patient.schema';
 import { useForm } from 'react-hook-form';
 
 type Props = {

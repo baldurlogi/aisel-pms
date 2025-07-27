@@ -1,6 +1,5 @@
 'use client';
 
-import type { Patient } from '../../../../../libs/dtos/patient.schema';
 import { LogoutAlertDialog } from '@/components/LogoutAlertDialog';
 import { PatientForm } from '@/components/PatientForm';
 import { PatientsDrawer } from '@/components/PatientsDrawer';
@@ -26,6 +25,7 @@ import {
 import { api } from '@/lib/api';
 import { useDebounce } from '@/lib/hooks/useDebounce';
 import { useQuery } from '@tanstack/react-query';
+import type { Patient } from 'libs/dtos/patient.schema';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 

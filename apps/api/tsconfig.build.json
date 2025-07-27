@@ -2,7 +2,6 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "outDir": "./dist",
-    // Remove or set rootDir to the monorepo root or a common parent folder
     "rootDir": "../../",
     "composite": false
   },
