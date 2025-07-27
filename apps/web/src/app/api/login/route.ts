@@ -4,13 +4,13 @@ export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
 
-    const res = await fetch('http://localhost:4000/auth/login', {
+    const apiUrl = process.env.API_URL;
+    const res = await fetch(`${apiUrl}/auth/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body),
+      cache: 'no-store',
     });
-
-    console.log('Response status from auth server:', res.status);
 
     if (!res.ok) {
       const errorText = await res.text();

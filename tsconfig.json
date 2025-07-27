@@ -13,6 +13,9 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true
   },
+  "eslintOptions": {
+    "noWarnOnMultipleProjects": true
+  },
   // Cover *everything* the linter might load:
   "include": ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx"]
 }

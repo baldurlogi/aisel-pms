@@ -1,25 +1,38 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-export async function POST(_req: NextRequest) {
-  // Call NestJS backend logout endpoint to clear refresh token in DB
-  const backendRes = await fetch('http://localhost:4000/auth/logout', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    credentials: 'include',
-  });
+const API_URL = process.env.API_URL ?? 'http://localhost:4000';
 
-  if (!backendRes.ok) {
-    const error = await backendRes.text();
-    return new NextResponse(error, { status: backendRes.status });
+export async function POST(req: NextRequest) {
+  try {
+    const cookieHeader = req.headers.get('cookie') ?? '';
+
+    const backendRes = await fetch(`${API_URL}/auth/logout`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Cookie: cookieHeader,
+      },
+      cache: 'no-store',
+    });
+
+    if (!backendRes.ok) {
+      const error = await backendRes.text();
+      return new NextResponse(error, { status: backendRes.status });
+    }
+
+    const res = NextResponse.json({ message: 'Logged out' }, { status: 200 });
+
+    res.cookies.set({
+      name: 'auth_token',
+      value: '',
+      httpOnly: true,
+      path: '/',
+      expires: new Date(0),
+    });
+
+    return res;
+  } catch (err) {
+    console.error('Error during logout:', err);
+    return NextResponse.json({ message: 'Internal server error' }, { status: 500 });
   }
-
-  // Clear cookie on client side
-  const response = NextResponse.json({ message: 'Logged out' });
-  response.cookies.set('auth_token', '', {
-    httpOnly: true,
-    expires: new Date(0),
-    path: '/',
-  });
-
-  return response;
 }
