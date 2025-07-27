@@ -2,6 +2,8 @@
   "name": "asiel-pms",
   "private": true,
   "scripts": {
+    "start": "pnpm --filter api start:prod",
+    "build": "pnpm --filter api build",
     "lint": "eslint \"**/*.{js,jsx,ts,tsx}\" --fix --no-warn-ignored --max-warnings=0",
     "format": "prettier . --check",
     "format:write": "prettier . --write"

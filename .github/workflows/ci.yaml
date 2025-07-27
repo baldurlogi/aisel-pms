@@ -42,7 +42,7 @@ jobs:
 
       - name: Install postgresql client
         run: sudo apt-get update && sudo apt-get install -y postgresql-client
-      
+
       - name: Debug Postgres logs
         run: docker logs $(docker ps -qf "ancestor=postgres:15") || true
 
