@@ -4,6 +4,8 @@ import type { Patient } from '../../../../../libs/dtos/patient.schema';
 import { PatientForm } from '@/components/PatientForm';
 import { PatientsDrawer } from '@/components/PatientsDrawer';
 import TableSkeleton from '@/components/TableSkeleton';
+import { useTheme } from '@/components/ThemeProvider';
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
@@ -38,6 +40,8 @@ export default function PatientsList() {
   const [search, setSearch] = useState(searchParams.get('search') || '');
   const debouncedSearch = useDebounce(search, 300);
 
+  const { theme, toggle } = useTheme();
+
   const { data, isLoading, error, refetch } = useQuery<Patient[]>({
     queryKey: ['patients', debouncedSearch],
     queryFn: () =>
@@ -51,7 +55,16 @@ export default function PatientsList() {
   return (
     <>
       <div className="p-4">
-        <h1 className="text-2xl font-bold mb-4">Patients</h1>
+        <div className="flex justify-between items-center mb-4">
+          <h1 className="text-2xl font-bold mb-4">Patients</h1>
+          <Button
+            onClick={toggle}
+            variant="outline"
+            className="text-sm px-3 py-2 rounded mg-muted bg-primary text-white dark:hover:bg-gray-200 dark:hover:text-zinc-900"
+          >
+            {theme === 'dark' ? '🌙 Dark' : '☀️ Light'}
+          </Button>
+        </div>
         <div className="flex justify-between items-center mb-4">
           <Input
             placeholder="Search patients..."
@@ -71,12 +84,14 @@ export default function PatientsList() {
           />
           <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-              <button
-                className="bg-primary text-white rounded-full px-4 py-2 text-sm font-medium shadow hover:bg-primary/90 transition"
+              <Button
+                aria-haspopup="dialog"
+                variant="outline"
+                className="bg-primary text-white rounded-full px-4 py-2 text-sm font-medium shadow dark:hover:bg-gray-200 dark:hover:text-zinc-900 transition"
                 onClick={() => setOpen(true)}
               >
                 + Add Patient
-              </button>
+              </Button>
             </DialogTrigger>
             <DialogContent>
               <DialogHeader>
@@ -93,7 +108,7 @@ export default function PatientsList() {
           </Dialog>
         </div>
         <div className="overflow-x-auto">
-          <Table className="hidden md:block overflow-x-auto">
+          <Table className="hidden md:table w-full">
             <TableHeader>
               <TableRow>
                 <TableHead>First Name</TableHead>
@@ -141,7 +156,7 @@ export default function PatientsList() {
                     setSelectedPatient(patient);
                     setDrawerOpen(true);
                   }}
-                  className="p-4 border rounded-lg shadow cursor-pointer bg-white hover:bg-muted"
+                  className="p-4 border rounded-lg shadow cursor-pointer bg-white hover:bg-muted dark:bg-zinc-900"
                 >
                   <h2 className="font-semibold">
                     {patient.firstName} {patient.lastName}
