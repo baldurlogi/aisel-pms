@@ -1,8 +1,7 @@
 import { INestApplication } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
-import * as request from 'supertest';
-import { Response } from 'supertest';
-import { AppModule } from '../src/app.module';
+import request, { Response } from 'supertest';
+import { AppModule } from '../app.module';
 
 interface LoginResponse {
   access_token: string;

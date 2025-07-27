@@ -4,6 +4,11 @@ import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from '../prisma/prisma.service';
 import * as bcrypt from 'bcryptjs';
 
+// Mock bcrypt module
+jest.mock('bcryptjs', () => ({
+  compare: jest.fn(),
+}));
+
 describe('AuthService', () => {
   let service: AuthService;
 
@@ -32,6 +37,10 @@ describe('AuthService', () => {
     service = module.get<AuthService>(AuthService);
   });
 
+  afterEach(() => {
+    jest.clearAllMocks(); // clear mocks after each test
+  });
+
   it('should be defined', () => {
     expect(service).toBeDefined();
   });
@@ -45,7 +54,9 @@ describe('AuthService', () => {
         role: 'USER',
       };
       mockPrismaService.user.findUnique.mockResolvedValue(user);
-      (jest.spyOn(bcrypt, 'compare') as jest.Mock).mockResolvedValue(true);
+
+      // Access the mocked compare method and set resolved value
+      (bcrypt.compare as jest.Mock).mockResolvedValue(true);
 
       const result = await service.validateUser('test@example.com', 'password');
       expect(result).toEqual({
@@ -72,7 +83,8 @@ describe('AuthService', () => {
         role: 'USER',
       };
       mockPrismaService.user.findUnique.mockResolvedValue(user);
-      (jest.spyOn(bcrypt, 'compare') as jest.Mock).mockResolvedValue(false);
+
+      (bcrypt.compare as jest.Mock).mockResolvedValue(false);
 
       const result = await service.validateUser(
         'test@example.com',
@@ -81,5 +93,4 @@ describe('AuthService', () => {
       expect(result).toBeNull();
     });
   });
-  // Add more tests for login, refresh, etc. similarly...
 });

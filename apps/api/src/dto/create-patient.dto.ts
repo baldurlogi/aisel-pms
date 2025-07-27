@@ -5,23 +5,23 @@ export class CreatePatientDto {
   @ApiProperty({ example: 'Alice' })
   @IsString()
   @Length(1, 50)
-  firstName: string;
+  firstName!: string;
 
   @ApiProperty({ example: 'Smith' })
   @IsString()
   @Length(1, 50)
-  lastName: string;
+  lastName!: string;
 
   @ApiProperty({ example: 'alice@example.com' })
   @IsEmail()
-  email: string;
+  email!: string;
 
   @ApiProperty({ example: '+1234567890' })
   @IsString()
   @Length(8, 20)
-  phoneNumber: string;
+  phoneNumber?: string;
 
   @ApiProperty({ example: '1990-01-01' })
   @IsDateString()
-  dob: string;
+  dob!: string;
 }

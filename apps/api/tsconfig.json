@@ -1,6 +1,8 @@
 {
+  "extends": "../../tsconfig.json",
   "compilerOptions": {
     "module": "commonjs",
+    "moduleResolution": "node",
     "declaration": true,
     "removeComments": true,
     "emitDecoratorMetadata": true,
@@ -9,27 +11,33 @@
     "target": "ES2023",
     "sourceMap": true,
     "outDir": "./dist",
-    "rootDir": "../..",
+    "rootDir": "./src",
     "baseUrl": ".",
     "incremental": true,
     "skipLibCheck": true,
     "strictNullChecks": true,
     "forceConsistentCasingInFileNames": true,
+    "verbatimModuleSyntax": false,
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "noFallthroughCasesInSwitch": false,
     "paths": {
-      "config/*": ["src/config/*"],
-      "common/*": ["src/common/*"],
-      "libs/*": ["../../libs/*"]
+      "config/*": ["config/*"],
+      "common/*": ["common/*"],
+      "libs/dtos/*": ["../../dist/libs/dtos/*"]
     }
   },
   "include": [
-    "src/**/*.ts",
+    "apps/api/src/**/*",
     "test/**/*",
     "prisma/**/*.ts",
     "test/jest.config.ts",
-    "../../libs/dtos/**/*.ts"
+    "src/**/*",
   ],
-  "exclude": ["node_modules", "**/*.dockerignore", "**/*.yaml", "**/*.yml"]
+  "references": [
+    {
+      "path": "../../libs/dtos"
+    }
+  ],
+  "exclude": ["node_modules", "dist", "**/*.dockerignore", "**/*.yaml", "**/*.yml"]
 }

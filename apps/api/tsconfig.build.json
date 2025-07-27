@@ -1,10 +1,21 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "outDir": "./dist",
-    "rootDir": "../../",
-    "composite": false
+    "composite": true,
+    "outDir": "dist",
+    "rootDir": "src",
+    "baseUrl": ".",
+    "noEmit": false,
+    "allowImportingTsExtensions": false,
+    "paths": {
+      "libs/dtos/*": ["../../dist/libs/dtos/*"],
+      "common/*": ["common/*"],
+      "config/*": ["config/*"]
+    }
   },
-  "include": ["src/**/*", "../../libs/dtos/**/*"],
-  "exclude": ["node_modules", "dist", "**/*.spec.ts"]
+  "references": [
+    { "path": "../../libs/dtos" }
+  ],
+  "exclude": ["**/*.spec.ts", "**/*.test.ts"],
+  "include": ["src/**/*"]
 }

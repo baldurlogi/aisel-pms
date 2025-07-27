@@ -7,19 +7,23 @@
   "license": "UNLICENSED",
   "scripts": {
     "prebuild": "pnpm prisma generate --schema=src/prisma/schema.prisma",
+    "postinstall": "pnpm prisma",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
-    "start": "node dist/apps/api/src/main.js",
+    "start": "node dist/main.js",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
-    "start:prod": "pnpm start",
+    "start:prod": "node dist/main.js",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "prisma": "prisma generate --schema=src/prisma/schema.prisma"
+    "prisma": "prisma generate --schema=src/prisma/schema.prisma",
+    "clean": "rm -rf dist tsconfig*.tsbuildinfo",
+    "build:prod": "pnpm --filter dtos run build && pnpm run clean && pnpm run build"
+
   },
   "dependencies": {
     "@anatine/zod-nestjs": "^2.0.12",
@@ -36,6 +40,7 @@
     "bcryptjs": "^3.0.2",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.2",
+    "module-alias": "^2.2.3",
     "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",
     "reflect-metadata": "^0.2.2",
@@ -91,5 +96,10 @@
     ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
+  },
+  "_moduleAliases": {
+    "libs/dtos": "../../dist/libs/dtos",
+    "common":     "dist/common",
+    "config":     "dist/config"
   }
 }

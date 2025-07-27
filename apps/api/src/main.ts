@@ -1,10 +1,12 @@
+import 'module-alias/register';
 import { NestFactory, Reflector } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
 import { ValidationPipe } from '@nestjs/common';
-import { RolesGuard } from 'common/guards/roles.guard';
+import { RolesGuard } from './common/guards/roles.guard';
 import helmet from 'helmet';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import 'reflect-metadata';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
