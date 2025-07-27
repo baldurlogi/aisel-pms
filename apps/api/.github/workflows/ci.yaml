@@ -25,6 +25,22 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+      
+      - uses: pnpm/action-setup@v4
+        name: Install pnpm
+        with:
+          version: 10
+          run_install: false
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install
+
 
       - name: Install postgresql client
         run: sudo apt-get update && sudo apt-get install -y postgresql-client
@@ -46,9 +62,6 @@ jobs:
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
         run: npx prisma migrate deploy --schema=src/prisma/schema.prisma
-
-      - name: 📥 Install dependencies
-        run: pnpm install
 
       #- name: ✅ Lint
       #  run: pnpm -F api lint

@@ -30,5 +30,6 @@
     "prisma/**/*.ts",
     "test/jest.config.ts",
     "../../libs/dtos/**/*.ts"
-  ]
+  ],
+  "exclude": ["node_modules", "**/*.dockerignore", "**/*.yaml", "**/*.yml"]
 }

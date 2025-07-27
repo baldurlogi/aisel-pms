@@ -15,16 +15,15 @@ services:
 
   api:
     build:
-      context: .
+      context: ./apps/api
       dockerfile: Dockerfile
     depends_on:
       - db
     ports:
-      - '3000:3000'
+      - '4000:4000'
     env_file:
       - apps/api/.env
-    volumes:
-      - ./apps/api/.env:/app/.env:ro
+
     restart: unless-stopped
 
 volumes:

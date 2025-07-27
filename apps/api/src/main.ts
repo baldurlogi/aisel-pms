@@ -30,7 +30,7 @@ async function bootstrap() {
   app.useGlobalGuards(new RolesGuard(reflector));
 
   const config = app.get(ConfigService);
-  const port = config.get<number>('port') ?? 4000;
+  const port = config.get<number>('PORT') ?? 4000;
 
   const configSwagger = new DocumentBuilder()
     .setTitle('API Documentation')

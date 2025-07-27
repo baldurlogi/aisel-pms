@@ -50,5 +50,5 @@ RUN npx prisma generate --schema=./prisma/schema.prisma
 # Copy built app
 COPY --from=builder /app/apps/api/dist ./dist
 
-EXPOSE 3000
+EXPOSE 4000
 CMD ["node", "dist/main.js"]
