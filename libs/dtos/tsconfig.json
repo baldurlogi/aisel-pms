@@ -3,7 +3,9 @@
   "compilerOptions": {
     "composite": true,
     "declaration": true,
-    "outDir": "../../dist/libs/dtos"
+    "outDir": "../../dist/libs/dtos",
+    "allowImportingTsExtensions": false,
+    "noEmit": false
   },
   "include": ["**/*.ts"]
 }

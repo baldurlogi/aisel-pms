@@ -32,12 +32,18 @@
     "test/**/*",
     "prisma/**/*.ts",
     "test/jest.config.ts",
-    "src/**/*",
+    "src/**/*"
   ],
   "references": [
     {
       "path": "../../libs/dtos"
     }
   ],
-  "exclude": ["node_modules", "dist", "**/*.dockerignore", "**/*.yaml", "**/*.yml"]
+  "exclude": [
+    "node_modules",
+    "dist",
+    "**/*.dockerignore",
+    "**/*.yaml",
+    "**/*.yml"
+  ]
 }

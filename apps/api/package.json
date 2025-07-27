@@ -23,7 +23,6 @@
     "prisma": "prisma generate --schema=src/prisma/schema.prisma",
     "clean": "rm -rf dist tsconfig*.tsbuildinfo",
     "build:prod": "pnpm --filter dtos run build && pnpm run clean && pnpm run build"
-
   },
   "dependencies": {
     "@anatine/zod-nestjs": "^2.0.12",
@@ -99,7 +98,7 @@
   },
   "_moduleAliases": {
     "libs/dtos": "../../dist/libs/dtos",
-    "common":     "dist/common",
-    "config":     "dist/config"
+    "common": "dist/common",
+    "config": "dist/config"
   }
 }

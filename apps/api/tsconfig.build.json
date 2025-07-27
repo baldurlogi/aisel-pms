@@ -13,9 +13,7 @@
       "config/*": ["config/*"]
     }
   },
-  "references": [
-    { "path": "../../libs/dtos" }
-  ],
+  "references": [{ "path": "../../libs/dtos" }],
   "exclude": ["**/*.spec.ts", "**/*.test.ts"],
   "include": ["src/**/*"]
 }
