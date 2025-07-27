@@ -3,6 +3,17 @@
 import type { Patient } from '../../../../libs/dtos/patient.schema';
 import { PatientForm } from './PatientForm';
 import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
+import {
   Dialog,
   DialogContent,
   DialogDescription,
@@ -53,6 +64,32 @@ export function PatientsDrawer({ patient, open, onClose, refetch }: Props) {
             }}
           />
         </div>
+        <AlertDialog>
+          <AlertDialogTrigger asChild>
+            <button className="text-red-600 mt-4 text-sm hover:underline">Delete Patient</button>
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+              <AlertDialogDescription>
+                This action cannot be undone. This will permanently delete the patient.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogAction
+                onClick={async () => {
+                  if (!patient) return;
+                  await api.delete(`/patients/${patient.id}`);
+                  onClose();
+                  await refetch(); // refresh the list
+                }}
+              >
+                Confirm
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </DialogContent>
     </Dialog>
   );
