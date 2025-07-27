@@ -25,7 +25,7 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      
+
       - uses: pnpm/action-setup@v4
         name: Install pnpm
         with:
@@ -40,7 +40,6 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install
-
 
       - name: Install postgresql client
         run: sudo apt-get update && sudo apt-get install -y postgresql-client
