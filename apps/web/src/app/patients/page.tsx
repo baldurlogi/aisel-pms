@@ -135,6 +135,7 @@ export default function PatientsList() {
             patient={selectedPatient}
             open={drawerOpen}
             onClose={() => setDrawerOpen(false)}
+            refetch={refetch}
           />
         </div>
       </div>

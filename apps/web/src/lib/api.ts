@@ -15,11 +15,13 @@ export const api = {
     request<T>(path, 'POST', data, options),
   put: <T>(path: string, data: unknown, options?: RequestInit) =>
     request<T>(path, 'PUT', data, options),
+  patch: <T>(path: string, data: unknown, options?: RequestInit) =>
+    request<T>(path, 'PATCH', data, options),
   delete: <T>(path: string, options?: RequestInit) =>
     request<T>(path, 'DELETE', undefined, options),
 };
 
-type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE';
+type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
 
 async function request<T = unknown>(
   path: string,

@@ -38,16 +38,23 @@ export class PatientsService {
     return this.prisma.patient.findMany(); // no filter
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} patient`;
+  findOne(id: string) {
+    return this.prisma.patient.findUnique({ where: { id } });
   }
 
-  update(id: number, updatePatientDto: UpdatePatientDto) {
-    console.log('Updating patient with id:', id, 'and data:', updatePatientDto);
-    return `This action updates a #${id} patient`;
+  update(id: string, dto: UpdatePatientDto) {
+    const { dob, ...rest } = dto;
+
+    return this.prisma.patient.update({
+      where: { id },
+      data: {
+        ...rest,
+        ...(dob ? { dob: new Date(dob) } : {}),
+      },
+    });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} patient`;
+  remove(id: string) {
+    return this.prisma.patient.delete({ where: { id } });
   }
 }

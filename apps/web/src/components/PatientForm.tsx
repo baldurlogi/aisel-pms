@@ -8,16 +8,19 @@ import { useForm } from 'react-hook-form';
 
 type Props = {
   onSubmit: (data: CreatePatientDto) => void;
+  defaultValues?: Partial<CreatePatientDto>;
   isLoading?: boolean;
+  mode?: 'create' | 'edit';
 };
 
-export function PatientForm({ onSubmit, isLoading }: Props) {
+export function PatientForm({ onSubmit, isLoading, defaultValues, mode = 'create' }: Props) {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<CreatePatientDto>({
     resolver: zodResolver(CreatePatientSchema),
+    defaultValues,
   });
 
   return (
@@ -38,7 +41,7 @@ export function PatientForm({ onSubmit, isLoading }: Props) {
       {errors.dob && <p className="text-sm text-red-500">{errors.dob.message}</p>}
 
       <Button type="submit" disabled={isLoading} className="w-full">
-        {isLoading ? 'Saving...' : 'Save Patient'}
+        {isLoading ? 'Saving...' : mode === 'edit' ? 'Save Changes' : 'Create Patient'}
       </Button>
     </form>
   );

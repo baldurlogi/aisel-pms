@@ -38,17 +38,17 @@ export class PatientsController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.patientsService.findOne(+id);
+    return this.patientsService.findOne(id);
   }
 
   @Patch(':id')
   @UsePipes(new (ZodValidationPipe as any)(UpdatePatientSchema))
   update(@Param('id') id: string, @Body() dto: UpdatePatientDto) {
-    return this.patientsService.update(+id, dto);
+    return this.patientsService.update(id, dto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.patientsService.remove(+id);
+    return this.patientsService.remove(id);
   }
 }
