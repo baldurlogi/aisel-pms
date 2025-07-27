@@ -1,6 +1,7 @@
 'use client';
 
 import type { Patient } from '../../../../libs/dtos/patient.schema';
+import TableSkeleton from '@/components/TableSkeleton';
 import { api } from '@/lib/api';
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
@@ -14,7 +15,7 @@ export default function PatientsList() {
     queryFn: () => api.get<Patient[]>('/patients', { page, limit }),
   });
 
-  if (isLoading) return <div>Loading patients...</div>;
+  if (isLoading) return <TableSkeleton columns={5} rows={6} />;
 
   if (error instanceof Error) return <p className="text-red-500">Error: {error.message}</p>;
 

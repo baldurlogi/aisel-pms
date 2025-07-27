@@ -23,10 +23,8 @@ export class PatientsService {
 
   findAll(search?: string) {
     const trimmed = search?.trim();
-    console.log('Hello');
 
     if (trimmed) {
-      console.log('🔍 Searching for:', trimmed);
       return this.prisma.patient.findMany({
         where: {
           OR: [
