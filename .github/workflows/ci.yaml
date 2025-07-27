@@ -46,7 +46,7 @@ jobs:
       - name: Wait for Postgres to be ready
         run: |
           for i in {1..30}; do
-            if pg_isready -h localhost -p 5432 -U johndoe -d mydb; then
+            if pg_isready -h db -p 5432 -U johndoe -d mydb; then
               echo "Postgres is ready"
               break
             else
@@ -58,7 +58,7 @@ jobs:
       - name: Run Prisma migrations
         working-directory: ./apps/api
         env:
-          DATABASE_URL: postgres://johndoe:randompassword@127.0.0.1:5432/mydb
+          DATABASE_URL: postgres://johndoe:randompassword@db:5432/mydb
         run: npx prisma migrate deploy --schema=src/prisma/schema.prisma
 
       #- name: ✅ Lint
