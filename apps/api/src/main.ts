@@ -1,7 +1,6 @@
 import 'module-alias/register';
 import { NestFactory, Reflector } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { ConfigService } from '@nestjs/config';
 import { ValidationPipe } from '@nestjs/common';
 import { RolesGuard } from './common/guards/roles.guard';
 import helmet from 'helmet';
@@ -37,8 +36,7 @@ async function bootstrap() {
   const reflector = app.get(Reflector);
   app.useGlobalGuards(new RolesGuard(reflector));
 
-  const config = app.get(ConfigService);
-  const port = config.get<number>('PORT') ?? 4000;
+  const port = process.env.PORT || 8080;
 
   const configSwagger = new DocumentBuilder()
     .setTitle('API Documentation')
@@ -48,7 +46,7 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, configSwagger);
   SwaggerModule.setup('api/docs', app, document);
 
-  await app.listen(port);
-  console.log(`Application is running on http://localhost:${port}`);
+  await app.listen(port, '0.0.0.0');
+  console.log(`✅  API listening on :${port}`);
 }
 bootstrap();
