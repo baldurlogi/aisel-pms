@@ -11,6 +11,8 @@ import 'reflect-metadata';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  console.log('API_URL =', process.env.API_URL);
+
   app.use(helmet());
 
   app.enableCors({
