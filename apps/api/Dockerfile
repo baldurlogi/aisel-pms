@@ -33,10 +33,17 @@ RUN corepack enable && corepack prepare pnpm@latest --activate
 
 WORKDIR /app
 
-# pull in only the built files + prod deps
-COPY --from=deps    /app/node_modules     ./node_modules
-COPY --from=builder /app/libs/dtos ./node_modules/libs/dtos
-COPY --from=builder /app/apps/api/dist    ./dist
+# 1) Copy your tsconfig so tsconfig-paths can read paths
+COPY apps/api/tsconfig.json ./tsconfig.json
+
+# 2) Bring in the full root node_modules (hoisted deps + Prisma client + Nest packages)
+COPY --from=deps /app/node_modules ./node_modules
+
+# 3) (Optional) If you still need your DTOs at runtime
+COPY --from=builder /app/libs/dtos      ./node_modules/libs/dtos
+
+# 4) Copy your compiled API
+COPY --from=builder /app/apps/api/dist  ./dist
 
 
 EXPOSE 4000
