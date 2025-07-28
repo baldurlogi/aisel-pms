@@ -4,9 +4,8 @@ FROM node:20-alpine AS deps
 # enable pnpm
 RUN corepack enable && corepack prepare pnpm@latest --activate
 
-WORKDIR /app
-
 # copy only the entire repo
+WORKDIR /app
 COPY . .
 
 # install everything (monorepo fashion)
@@ -18,6 +17,9 @@ RUN pnpm --filter api prisma generate --schema=apps/api/src/prisma/schema.prisma
 
 # ───── STAGE 2: build your NestJS app ─────
 FROM deps AS builder
+
+WORKDIR /app
+RUN pnpm --filter dtos build
 
 WORKDIR /app/apps/api
 RUN pnpm build
@@ -33,6 +35,7 @@ WORKDIR /app
 
 # pull in only the built files + prod deps
 COPY --from=builder /app/apps/api/dist    ./dist
+COPY --from=builder /app/libs/dtos/dist   ./libs/dtos/dist
 COPY --from=deps    /app/node_modules     ./node_modules
 
 EXPOSE 4000
