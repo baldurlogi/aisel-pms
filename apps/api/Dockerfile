@@ -52,6 +52,8 @@ RUN pnpm install --prod --frozen-lockfile
 # Copy built artifacts
 COPY --from=builder /app/libs/dtos ./libs/dtos
 COPY --from=builder /app/apps/api/dist ./apps/api/dist
+COPY --from=builder /app/libs/dtos ./dist/libs/dtos
+
 
 WORKDIR /app/apps/api
 
