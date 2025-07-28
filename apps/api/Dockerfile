@@ -48,6 +48,8 @@ RUN pnpm install --frozen-lockfile
 # Generate Prisma client in production
 RUN pnpm --filter api prisma generate --schema=apps/api/src/prisma/schema.prisma
 
+RUN pnpm --filter api prisma db push --schema=apps/api/src/prisma/schema.prisma
+
 # Clean up dev dependencies after generating Prisma client
 RUN pnpm install --prod --frozen-lockfile
 
