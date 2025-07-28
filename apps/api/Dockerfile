@@ -28,7 +28,7 @@ RUN pnpm build
 # ───── STAGE 3: production image ─────
 FROM node:20-alpine AS production
 
-RUN apk add --no-cache openssl
+RUN apk add --no-cache openssl libc6-compat
 
 # enable pnpm
 RUN corepack enable && corepack prepare pnpm@latest --activate
