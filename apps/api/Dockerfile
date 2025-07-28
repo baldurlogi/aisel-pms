@@ -21,8 +21,6 @@ FROM deps AS builder
 WORKDIR /app
 RUN pnpm --filter dtos build
 
-RUN ls -R /app/libs/dtos
-
 WORKDIR /app/apps/api
 RUN pnpm build
 
@@ -37,7 +35,7 @@ WORKDIR /app
 
 # pull in only the built files + prod deps
 COPY --from=builder /app/apps/api/dist    ./dist
-COPY --from=builder /app/libs/dtos/dist ./node_modules/libs/dtos
+COPY --from=builder /app/libs/dtos ./node_modules/libs/dtos
 COPY --from=deps    /app/node_modules     ./node_modules
 
 EXPOSE 4000
