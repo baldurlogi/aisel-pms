@@ -10,7 +10,7 @@ import 'reflect-metadata';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  console.log('API_URL =', process.env.API_URL);
+  console.log('API_URL =', process.env.NEXT_PUBLIC_API_URL);
 
   app.use(helmet());
 
@@ -45,6 +45,15 @@ async function bootstrap() {
     .build();
   const document = SwaggerModule.createDocument(app, configSwagger);
   SwaggerModule.setup('api/docs', app, document);
+
+  const server = app.getHttpAdapter().getInstance();
+  server._router.stack
+    .filter((r) => r.route)
+    .forEach((r) =>
+      console.log(
+        `[ROUTE] ${Object.keys(r.route.methods)[0].toUpperCase()} ${r.route.path}`,
+      ),
+    );
 
   await app.listen(process.env.PORT ?? 8080, '0.0.0.0');
   console.log(`✅  API listening on :${port}`);
