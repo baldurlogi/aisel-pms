@@ -35,7 +35,7 @@ WORKDIR /app/apps/api
 
 # 1) Copy only the API’s package.json & lockfile, so we can install just its prod deps
 COPY apps/api/package.json ./package.json
-COPY pnpm-lock.yaml ../pnpm-lock.yaml
+COPY pnpm-lock.yaml ./pnpm-lock.yaml
 
 # 2) Install production deps _inside_ apps/api/node_modules
 RUN pnpm install --prod --frozen-lockfile
