@@ -8,6 +8,7 @@ import {
   Delete,
   UsePipes,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { PatientsService } from '../patients/patients.service';
 import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
@@ -18,7 +19,9 @@ import {
   UpdatePatientSchema,
   UpdatePatientDto,
 } from 'libs/dtos/patient.schema';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
+@UseGuards(JwtAuthGuard)
 @ApiTags('patients')
 @ApiBearerAuth()
 @Controller('patients')

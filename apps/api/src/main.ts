@@ -21,7 +21,7 @@ async function bootstrap() {
       /https:\/\/aisel-pms-web-.*\.vercel\.app/,
     ],
     credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
   });
 
