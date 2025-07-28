@@ -34,9 +34,10 @@ RUN corepack enable && corepack prepare pnpm@latest --activate
 WORKDIR /app
 
 # pull in only the built files + prod deps
-COPY --from=builder /app/apps/api/dist    ./dist
-COPY --from=builder /app/libs/dtos ./node_modules/libs/dtos
 COPY --from=deps    /app/node_modules     ./node_modules
+COPY --from=builder /app/libs/dtos ./node_modules/libs/dtos
+COPY --from=builder /app/apps/api/dist    ./dist
+
 
 EXPOSE 4000
 CMD ["node", "dist/main.js"]
