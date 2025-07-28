@@ -37,8 +37,14 @@ COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY apps/api/package.json ./apps/api/package.json
 COPY libs/dtos/package.json ./libs/dtos/package.json
 
+# Copy Prisma schema for client generation
+COPY apps/api/src/prisma ./apps/api/src/prisma
+
 # Install production dependencies for the entire workspace
 RUN pnpm install --prod --frozen-lockfile
+
+# Generate Prisma client in production
+RUN pnpm --filter api prisma generate --schema=apps/api/src/prisma/schema.prisma
 
 # Copy built artifacts
 COPY --from=builder /app/libs/dtos ./libs/dtos
