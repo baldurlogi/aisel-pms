@@ -47,13 +47,19 @@ async function bootstrap() {
   SwaggerModule.setup('api/docs', app, document);
 
   const server = app.getHttpAdapter().getInstance();
-  server._router.stack
-    .filter((r) => r.route)
-    .forEach((r) =>
-      console.log(
-        `[ROUTE] ${Object.keys(r.route.methods)[0].toUpperCase()} ${r.route.path}`,
-      ),
+  if ('_router' in server && Array.isArray(server._router.stack)) {
+    server._router.stack
+      .filter((r) => r.route)
+      .forEach((r) =>
+        console.log(
+          `[ROUTE] ${Object.keys(r.route.methods)[0].toUpperCase()} ${r.route.path}`,
+        ),
+      );
+  } else {
+    console.warn(
+      '[!] Could not log routes. Possibly using a non-Express adapter.',
     );
+  }
 
   await app.listen(process.env.PORT ?? 8080, '0.0.0.0');
   console.log(`✅  API listening on :${port}`);
