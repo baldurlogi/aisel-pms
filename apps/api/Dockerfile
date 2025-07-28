@@ -31,20 +31,20 @@ FROM node:20-alpine AS production
 # enable pnpm
 RUN corepack enable && corepack prepare pnpm@latest --activate
 
-WORKDIR /app/apps/api
+# Copy the entire workspace structure to maintain lockfile compatibility
+WORKDIR /app
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY apps/api/package.json ./apps/api/package.json
+COPY libs/dtos/package.json ./libs/dtos/package.json
 
-# 1) Copy only the API’s package.json & lockfile, so we can install just its prod deps
-COPY apps/api/package.json ./package.json
-COPY pnpm-lock.yaml ./pnpm-lock.yaml
-
-# 2) Install production deps _inside_ apps/api/node_modules
+# Install production dependencies for the entire workspace
 RUN pnpm install --prod --frozen-lockfile
 
-# 3) Copy in your DTO library (if your code imports "libs/dtos" at runtime)
-COPY --from=builder /app/libs/dtos ./node_modules/libs/dtos
+# Copy built artifacts
+COPY --from=builder /app/libs/dtos ./libs/dtos
+COPY --from=builder /app/apps/api/dist ./apps/api/dist
 
-# 4) Copy the compiled output
-COPY --from=builder /app/apps/api/dist ./dist
+WORKDIR /app/apps/api
 
 EXPOSE 4000
 CMD ["node", "dist/main.js"]
