@@ -1,72 +1,54 @@
-# ---------- STAGE 1: Build ----------
-FROM node:20-alpine AS builder
+# ───── STAGE 1: Install deps & generate Prisma client ─────
+FROM node:20.17.0-alpine3.18 AS deps
 
-RUN corepack enable && corepack prepare pnpm@latest --activate
+# 1) Enable pnpm
+RUN corepack enable \
+ && corepack prepare pnpm@latest --activate
+
 WORKDIR /app
 
-# Copy monorepo workspace files first
-COPY pnpm-workspace.yaml ./
+# 2) Copy lockfiles and workspace manifest
 COPY pnpm-lock.yaml ./
-COPY .env ./
+COPY pnpm-workspace.yaml ./
 
-# Copy all package.json files to understand the full dependency tree
-COPY package.json* ./
+# 3) Copy only your API’s package.json to scope the install
 COPY apps/api/package.json ./apps/api/package.json
-COPY apps/web/package.json ./apps/web/package.json
 
-# Install all dependencies using pnpm (supports monorepo)
+# 4) Install all deps (monorepo-aware)
 RUN pnpm install --frozen-lockfile
 
-# Copy the rest of the source code (dockerignore will exclude unwanted files)
-# This includes any libs/ folder and other shared code
+# 5) Copy in your Prisma schema and generate the client
+COPY apps/api/src/prisma ./apps/api/src/prisma
+RUN pnpm --filter api prisma generate \
+    --schema=apps/api/src/prisma/schema.prisma
+
+
+# ───── STAGE 2: Build your NestJS API ─────
+FROM deps AS builder
+
+WORKDIR /app
+
+# Copy the rest of your repo (source code, libs, etc)
 COPY . .
 
-# Generate Prisma client from root (monorepo style)
-RUN pnpm --filter api prisma generate --schema=apps/api/src/prisma/schema.prisma
-
-# Move to API directory for building
+# Move into the API package and build it
 WORKDIR /app/apps/api
-
-# Build the NestJS project
 RUN pnpm build
 
 
-# ---------- STAGE 2: Runtime ----------
-FROM node:20-alpine AS production
+# ───── STAGE 3: Production image ─────
+FROM node:20.17.0-alpine3.18 AS production
 
-ENV NODE_ENV=production
-
-# Enable pnpm
-# Enable pnpm and install required build tools + openssl
-RUN corepack enable && corepack prepare pnpm@latest --activate \
-    && apk add --no-cache make g++ python3 openssl
+# 1) Enable pnpm
+RUN corepack enable \
+ && corepack prepare pnpm@latest --activate
 
 WORKDIR /app
 
-# Copy monorepo files
-COPY pnpm-workspace.yaml ./
-COPY pnpm-lock.yaml ./
-COPY .env ./
+# 2) Copy only what we need from previous stages
+COPY --from=builder /app/apps/api/dist    ./dist
+COPY --from=deps    /app/node_modules     ./node_modules
 
-# Copy all package.json files
-COPY package.json* ./
-COPY apps/api/package.json ./apps/api/package.json
-
-# Install ALL dependencies (including dev) to have Prisma CLI available
-RUN pnpm install --frozen-lockfile
-
-# Switch to API directory
-WORKDIR /app/apps/api
-
-# Copy build artifacts
-COPY --from=builder /app/apps/api/dist ./dist
-COPY --from=builder /app/apps/api/src/prisma ./src/prisma
-
-# Generate Prisma client directly in production stage
-RUN cd /app && pnpm --filter api prisma generate --schema=apps/api/src/prisma/schema.prisma
-
-# Clean up dev dependencies to reduce image size
-RUN pnpm install --prod --frozen-lockfile
-
+# 3) Expose your API port
 EXPOSE 4000
-CMD ["node", "dist/apps/api/src/main.js"]
+CMD ["node", "dist/main.js"]
