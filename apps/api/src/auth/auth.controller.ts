@@ -13,24 +13,35 @@ import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
 import { Response } from 'express';
 import { BadRequestException } from '@nestjs/common/exceptions/bad-request.exception';
+import { ApiTags, ApiBearerAuth, ApiBody, ApiResponse } from '@nestjs/swagger';
 
+@ApiTags('auth')
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @Get('protected')
+  @ApiResponse({
+    status: 200,
+    description: 'Access to protected route granted',
+  })
   getProtected() {
     return { message: 'You accessed a protected route!' };
   }
 
   @Post('login')
+  @ApiBody({ type: LoginDto })
+  @ApiResponse({ status: 200, description: 'Login success' })
+  @ApiResponse({ status: 401, description: 'Invalid credentials' })
   async login(@Body() dto: LoginDto) {
     console.log('🔐 Attempting to log in with:', dto);
     return await this.authService.login(dto);
   }
 
   @Post('refresh')
+  @ApiResponse({ status: 200, description: 'Refreshed JWT tokens' })
   async refresh(@Req() req) {
     const refreshToken = req.cookies?.refresh_token;
     const userId = req.cookies?.user_id;
@@ -44,14 +55,10 @@ export class AuthController {
 
   @Post('logout')
   @UseGuards(JwtAuthGuard)
-  async logout(
-    @Req() req, // injected request with user info from JwtAuthGuard
-    @Res({ passthrough: true }) res: Response,
-  ) {
-    const userId = req.user?.id; // JwtAuthGuard attaches the user object
-
-    console.log('🔒 Logging out user:', userId);
-
+  @ApiBearerAuth()
+  @ApiResponse({ status: 200, description: 'User logged out' })
+  async logout(@Req() req, @Res({ passthrough: true }) res: Response) {
+    const userId = req.user?.id;
     if (!userId) {
       throw new BadRequestException('User ID is required for logout');
     }

@@ -84,7 +84,7 @@ export class AuthService {
    */
   async login(
     dto: LoginDto,
-  ): Promise<{ access_token: string; refresh_token: string }> {
+  ): Promise<{ access_token: string; refresh_token: string; user_id: string }> {
     const user = await this.validateUser(dto.email, dto.password);
     if (!user) throw new UnauthorizedException('Invalid credentials');
 
@@ -98,6 +98,7 @@ export class AuthService {
     return {
       access_token,
       refresh_token,
+      user_id: user.id,
     };
   }
 }
