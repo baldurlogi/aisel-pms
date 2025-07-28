@@ -1,11 +1,9 @@
 import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
-import { jwtConstants } from '../constants/jwt.constants';
+import { ExtractJwt, Strategy as JwtStrategyBase } from 'passport-jwt';
 import { Role } from '@prisma/client';
-import * as passportJwt from 'passport-jwt';
-
-const ExtractJwt = passportJwt.ExtractJwt;
-const JwtStrategyBase = passportJwt.Strategy;
+import { JWT_SECRET_KEY } from '../constants/jwt.constants';
 
 interface JwtPayload {
   sub: string;
@@ -15,11 +13,11 @@ interface JwtPayload {
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(JwtStrategyBase) {
-  constructor() {
+  constructor(private configService: ConfigService) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
-      secretOrKey: jwtConstants.secret,
+      secretOrKey: configService.getOrThrow<string>(JWT_SECRET_KEY),
     });
   }
 
