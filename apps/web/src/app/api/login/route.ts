@@ -28,7 +28,7 @@ export async function POST(req: NextRequest) {
       name: 'auth_token',
       value: access_token,
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
+      secure: false,
       path: '/',
       sameSite: 'lax',
       maxAge: 60 * 60 * 24 * 7, // 7 days
@@ -38,7 +38,7 @@ export async function POST(req: NextRequest) {
       name: 'refresh_token',
       value: refresh_token,
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
+      secure: false,
       path: '/',
       sameSite: 'strict',
       maxAge: 60 * 60 * 24 * 30, // 30 days
@@ -48,7 +48,7 @@ export async function POST(req: NextRequest) {
       name: 'user_id',
       value: user_id,
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
+      secure: false,
       path: '/',
       sameSite: 'strict',
       maxAge: 60 * 60 * 24 * 30,
