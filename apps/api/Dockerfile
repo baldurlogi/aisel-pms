@@ -31,20 +31,20 @@ FROM node:20-alpine AS production
 # enable pnpm
 RUN corepack enable && corepack prepare pnpm@latest --activate
 
-WORKDIR /app
+WORKDIR /app/apps/api
 
-# 1) Copy your tsconfig so tsconfig-paths can read paths
-COPY apps/api/tsconfig.json ./tsconfig.json
+# 1) Copy only the API’s package.json & lockfile, so we can install just its prod deps
+COPY apps/api/package.json ./package.json
+COPY pnpm-lock.yaml ../pnpm-lock.yaml
 
-# 2) Bring in the full root node_modules (hoisted deps + Prisma client + Nest packages)
-COPY --from=deps /app/node_modules ./node_modules
+# 2) Install production deps _inside_ apps/api/node_modules
+RUN pnpm install --prod --frozen-lockfile
 
-# 3) (Optional) If you still need your DTOs at runtime
-COPY --from=builder /app/libs/dtos      ./node_modules/libs/dtos
+# 3) Copy in your DTO library (if your code imports "libs/dtos" at runtime)
+COPY --from=builder /app/libs/dtos ./node_modules/libs/dtos
 
-# 4) Copy your compiled API
-COPY --from=builder /app/apps/api/dist  ./dist
-
+# 4) Copy the compiled output
+COPY --from=builder /app/apps/api/dist ./dist
 
 EXPOSE 4000
 CMD ["node", "dist/main.js"]
