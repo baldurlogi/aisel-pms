@@ -49,7 +49,13 @@
     "class-validator": "^0.14.2",
     "helmet": "^8.1.0",
     "zod": "^4.0.10",
-    "tsconfig-paths": "^4.2.0"
+    "tsconfig-paths": "^4.2.0","@nestjs/core": "^11.1.5",
+    "@nestjs/common": "^11.1.5",
+    "@nestjs/platform-express": "^11.1.5",
+    "@nestjs/swagger": "^11.2.0",
+    "reflect-metadata": "^0.2.2",
+    "passport": "^0.7.0",
+    "passport-jwt": "^4.0.1"
   },
   "prisma": {
     "schema": "apps/api/src/prisma/schema.prisma"
