@@ -1,5 +1,5 @@
 # ───── STAGE 1: Install deps & generate Prisma client ─────
-FROM node:20.17.0-alpine3.18 AS deps
+FROM node:20-alpine AS builder
 
 # 1) Enable pnpm
 RUN corepack enable \
@@ -37,7 +37,7 @@ RUN pnpm build
 
 
 # ───── STAGE 3: Production image ─────
-FROM node:20.17.0-alpine3.18 AS production
+FROM node:20-alpine AS builder
 
 # 1) Enable pnpm
 RUN corepack enable \
