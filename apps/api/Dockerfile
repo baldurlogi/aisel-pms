@@ -36,11 +36,8 @@ RUN corepack enable && corepack prepare pnpm@latest --activate
 # Copy the entire workspace structure to maintain lockfile compatibility
 WORKDIR /app
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
-COPY apps/api/package.json ./apps/api/package.json
-COPY libs/dtos/package.json ./libs/dtos/package.json
-
-# Copy Prisma schema for client generation
-COPY apps/api/src/prisma ./apps/api/src/prisma
+COPY apps ./apps
+COPY libs ./libs
 
 # Install production dependencies for the entire workspace
 RUN pnpm install --frozen-lockfile
