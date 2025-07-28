@@ -35,7 +35,7 @@ WORKDIR /app
 
 # pull in only the built files + prod deps
 COPY --from=builder /app/apps/api/dist    ./dist
-COPY --from=builder /app/libs/dtos/dist   ./libs/dtos/dist
+COPY --from=builder /app/libs/dtos/dist ./node_modules/libs/dtos
 COPY --from=deps    /app/node_modules     ./node_modules
 
 EXPOSE 4000
