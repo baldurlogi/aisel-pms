@@ -37,7 +37,7 @@ A full-stack Patient Management System built for the Aisel technical case. It in
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/aisel-pms.git
+git clone https://github.com/<YOUR_USERNAME>/aisel-pms.git
 cd aisel-pms
 ```
 
