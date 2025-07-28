@@ -48,8 +48,6 @@ RUN pnpm install --frozen-lockfile
 # Generate Prisma client in production
 RUN pnpm --filter api prisma generate --schema=apps/api/src/prisma/schema.prisma
 
-RUN pnpm --filter api prisma db push --schema=apps/api/src/prisma/schema.prisma
-
 # Clean up dev dependencies after generating Prisma client
 RUN pnpm install --prod --frozen-lockfile
 
@@ -58,8 +56,9 @@ COPY --from=builder /app/libs/dtos ./libs/dtos
 COPY --from=builder /app/apps/api/dist ./apps/api/dist
 COPY --from=builder /app/libs/dtos ./dist/libs/dtos
 
-
-WORKDIR /app/apps/api
+# Copy and make start script executable
+COPY start.sh ./
+RUN chmod +x start.sh
 
 EXPOSE 4000
-CMD ["node", "dist/main.js"]
+CMD ["./start.sh"]
