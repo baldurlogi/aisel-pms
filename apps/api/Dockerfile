@@ -41,10 +41,13 @@ COPY libs/dtos/package.json ./libs/dtos/package.json
 COPY apps/api/src/prisma ./apps/api/src/prisma
 
 # Install production dependencies for the entire workspace
-RUN pnpm install --prod --frozen-lockfile
+RUN pnpm install --frozen-lockfile
 
 # Generate Prisma client in production
 RUN pnpm --filter api prisma generate --schema=apps/api/src/prisma/schema.prisma
+
+# Clean up dev dependencies after generating Prisma client
+RUN pnpm install --prod --frozen-lockfile
 
 # Copy built artifacts
 COPY --from=builder /app/libs/dtos ./libs/dtos
