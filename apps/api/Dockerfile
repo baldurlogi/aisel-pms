@@ -21,6 +21,8 @@ FROM deps AS builder
 WORKDIR /app
 RUN pnpm --filter dtos build
 
+RUN ls -R /app/libs/dtos
+
 WORKDIR /app/apps/api
 RUN pnpm build
 
