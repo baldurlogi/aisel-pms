@@ -1,3 +1,1 @@
-export const jwtConstants = {
-  secret: 'supersecretkey', // 🔐 Replace with env in prod
-};
+export const JWT_SECRET_KEY = 'JWT_SECRET';
