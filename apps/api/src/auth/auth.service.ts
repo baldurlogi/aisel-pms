@@ -2,16 +2,18 @@ import {
   Injectable,
   UnauthorizedException,
   ForbiddenException,
+  Logger,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from '../prisma/prisma.service';
 import * as bcrypt from 'bcryptjs';
-
 import { User, Role } from '@prisma/client';
 import { LoginDto } from './dto/login.dto';
 
 @Injectable()
 export class AuthService {
+  private readonly logger = new Logger(AuthService.name);
+
   constructor(
     private readonly jwtService: JwtService,
     private readonly prisma: PrismaService,
@@ -34,17 +36,18 @@ export class AuthService {
     });
 
     if (!user) {
+      this.logger.warn(`User not found with email: ${email}`);
       return null;
     }
 
-    const match = await bcrypt.compare(password, user.password);
+    const isMatch = await bcrypt.compare(password, user.password);
 
-    if (!match) {
+    if (!isMatch) {
       console.log('❌ Password mismatch for user:', email);
       return null;
     }
 
-    console.log('✅ Password matched. User validated');
+    this.logger.log(`✅ Validated user: ${email}`);
     return { id: user.id, email: user.email, role: user.role };
   }
 
@@ -79,9 +82,6 @@ export class AuthService {
     });
   }
 
-  /**
-   * Issues JWT access & refresh tokens.
-   */
   async login(
     dto: LoginDto,
   ): Promise<{ access_token: string; refresh_token: string; user_id: string }> {

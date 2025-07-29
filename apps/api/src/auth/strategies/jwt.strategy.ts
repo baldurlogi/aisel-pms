@@ -1,31 +1,29 @@
+// src/auth/strategies/jwt.strategy.ts
 import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
-import { ExtractJwt, Strategy as JwtStrategyBase } from 'passport-jwt';
-import { Role } from '@prisma/client';
+import { ExtractJwt, Strategy } from 'passport-jwt';
+import type { Request } from 'express';
+import { JwtPayload } from 'src/common/types/request-with-user';
 import { JWT_SECRET_KEY } from '../constants/jwt.constants';
 
-interface JwtPayload {
-  sub: string;
-  email: string;
-  role: Role;
-}
+const cookieExtractor = (req: Request): string | null =>
+  req.cookies?.auth_token ?? null;
 
 @Injectable()
-export class JwtStrategy extends PassportStrategy(JwtStrategyBase) {
-  constructor(private configService: ConfigService) {
+export class JwtStrategy extends PassportStrategy(Strategy) {
+  constructor() {
     super({
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      jwtFromRequest: ExtractJwt.fromExtractors([
+        cookieExtractor,
+        ExtractJwt.fromAuthHeaderAsBearerToken(),
+      ]),
       ignoreExpiration: false,
-      secretOrKey: configService.getOrThrow<string>(JWT_SECRET_KEY),
+      secretOrKey: process.env[JWT_SECRET_KEY]!,
+      passReqToCallback: false,
     });
   }
 
   validate(payload: JwtPayload) {
-    return {
-      userId: payload.sub,
-      email: payload.email,
-      role: payload.role,
-    };
+    return { id: payload.sub, email: payload.email, role: payload.role };
   }
 }

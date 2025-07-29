@@ -45,9 +45,8 @@ async function request<T = unknown>(
   if (!res.ok) {
     const error = await res.json().catch(() => ({}) as Record<string, unknown>);
 
-    if (res.status === 401 && typeof window !== 'undefined') {
-      window.location.href = '/login';
-      return Promise.reject(new Error('Unauthorized'));
+    if (res.status === 401) {
+      throw new Error('Unauthorized');
     }
 
     throw new Error(error.message || 'Request failed');

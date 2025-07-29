@@ -7,6 +7,7 @@ import {
   Res,
   Req,
   UnauthorizedException,
+  Logger,
 } from '@nestjs/common';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { AuthService } from './auth.service';
@@ -18,6 +19,8 @@ import { ApiTags, ApiBearerAuth, ApiBody, ApiResponse } from '@nestjs/swagger';
 @ApiTags('auth')
 @Controller('auth')
 export class AuthController {
+  private readonly logger = new Logger(AuthController.name);
+
   constructor(private readonly authService: AuthService) {}
 
   @UseGuards(JwtAuthGuard)
@@ -43,14 +46,30 @@ export class AuthController {
   @Post('refresh')
   @ApiResponse({ status: 200, description: 'Refreshed JWT tokens' })
   async refresh(@Req() req) {
+    this.logger.log('🔄 Refresh endpoint hit');
+    this.logger.log('📥 Raw cookies:', req.headers.cookie);
+    this.logger.log('🍪 Parsed cookies:', req.cookies);
+
     const refreshToken = req.cookies?.refresh_token;
     const userId = req.cookies?.user_id;
 
+    this.logger.log(
+      `🔍 Extracted - userId: ${userId}, refreshToken: ${refreshToken ? 'present' : 'missing'}`,
+    );
+
     if (!refreshToken || !userId) {
+      this.logger.warn('❌ Missing refresh credentials');
       throw new UnauthorizedException('Missing refresh credentials');
     }
 
-    return await this.authService.refresh(userId, refreshToken);
+    try {
+      const result = await this.authService.refresh(userId, refreshToken);
+      this.logger.log(`✅ Refresh successful for user: ${userId}`);
+      return result;
+    } catch (error) {
+      this.logger.error(`❌ Refresh failed for user: ${userId}`, error);
+      throw new UnauthorizedException('Invalid refresh token');
+    }
   }
 
   @Post('logout')

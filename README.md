@@ -9,112 +9,112 @@ A full-stack Patient Management System built for the Aisel technical case. It in
 - **Framework:** React (via Next.js)
 - **Styling:** Tailwind CSS + Shadcn/ui
 - **Auth:** JWT token-based
-- **Hosting:** Vercel
+- **Hosting:** Vercel (TBA)
 
 ### ⚙️ Backend
 
 - **Framework:** NestJS
-- **Database:** PostgreSQL (via Railway)
+- **Database:** PostgreSQL (via Railway - TBA)
 - **ORM:** Prisma
 - **Authentication:** JWT with Passport.js
-- **Dockerized:** Yes (multi-stage Dockerfile)
+- **Dockerized:** Multi-stage `Dockerfile`
 
-### ☁️ Cloud & DevOps
+### ☁️ Cloud & DevOps *(work in progress)*
 
 - **Backend Hosting:** Railway
-- **Database:** Railway Postgres
-- **CI/CD:** Railway + Vercel (GitHub Actions CI not working)
+- **Database Hosting:** Railway Postgres
+- **CI/CD:** Railway + Vercel
 - **Containerization:** Docker + Docker Compose
 
-## 🚀 Live Demo
+## 🛠️ Local Setup
 
-- **Frontend:** https://aisel-pms-web-whwd.vercel.app
-- **Backend API:** https://aisel-pms-api-production.up.railway.app
-- **Swagger Docs:** https://aisel-pms-api-production.up.railway.app/api/docs
-
-## 🛠️ Setup Instructions
-
-### 1. Clone the Repository
+### 1. Clone and install
 
 ```bash
 git clone https://github.com/baldurlogi/aisel-pms.git
 cd aisel-pms
+pnpm install
 ```
 
-### 2. Environment Variables
-
-#### Root `.env`
-
-```env
-DATABASE_URL=postgresql://username:password@host:port/dbname
-```
-
-> You can get this from Railway after creating a PostgreSQL service.
+### 2. Create Environment Variables
 
 #### apps/api/.env
 
 ```env
-DATABASE_URL=postgresql://username:password@host:port/dbname
-JWT_SECRET=your-secret-string
 PORT=4000
+JWT_SECRET="super-strong-random-string"
+DATABASE_URL="postgresql://johndoe:randompassword@localhost:5432/mydb"
 ```
 
 #### apps/web/.env
 
 ```env
-NEXT_PUBLIC_API_URL=https://aisel-pms-api-production.up.railway.app
+NEXT_PUBLIC_API_URL=http://localhost:4000
 ```
 
-### 3. Run Locally with Docker
+### 3. Run Locally without Docker (for now)
 
-#### Docker Compose
+> Note: replace pnpm with npm or yarn if preferred.
 
-```bash
-docker compose up --build
-```
-
-> This sets up the backend container, installs dependencies, pushes the schema with Prisma, and launches the NestJS app.
-
-### 4. Run Locally without Docker
-
-#### Backend
+#### DB - From root:
 
 ```bash
-cd apps/api
 pnpm install
-pnpm prisma generate --schema=src/prisma/schema.prisma
-pnpm prisma db push --schema=src/prisma/schema.prisma
-pnpm start:dev
+pnpm --filter api prisma db push
+pnpm --filter api prisma studio # opens at http://localhost:5555
 ```
 
-#### Frontend
+#### Bakcend - From root:
 
 ```bash
-cd apps/web
-pnpm install
-pnpm dev
+pnpm --filter api build
+pnpm --filter api start  # Nest app on http://localhost:4000
+```
+
+#### Frontend - From root:
+
+```bash
+pnpm --filter web dev # Next.js on http://localhost:3000
 ```
 
 ## 👤 Authentication
 
-- **Admin**: Full CRUD access
-- **User**: Read-only access
+- **ADMIN**: Full CRUD access
+- **USER**: Read-only access
 
-Pre-seeded admin user (can be added manually via Prisma Studio or SQL):
+### 1. Hash a password
+
+```bash
+cd apps/api
+const bcrypt = require('bcryptjs');
+bcrypt.hashSync('<your_password>', 10);
+```
+### 2. Copy the hashed password
+
+something like: '$2b$10$HP5Bgcq4TJvw6Jxd4xB2eOO1XMh7.GAmez9f/iqNRqh0KpiPyAw8.'
+
+
+### 3. Go to the Prisma studio (usually localhost:5555) and make a user with:
 
 ```json
 {
-  "email": "admin@example.com",
-  "password": "adminpassword",
+  "email": "your.name@example.com",
+  "password": <hashed_password>,
   "role": "ADMIN"
 }
 ```
 
-> Passwords are hashed with bcrypt. You can generate a hash using a script or insert raw in development.
+## 👤 Log in and see patient list
+
+### 1. Open http://localhost:3000 → redirected to /login.
+
+### 2. Sign in with the admin credentials above
+
+### 3. You’ll land on /patients, where full CRUD is enabled.
 
 ## 🧪 Testing
 
-> Not implemented yet — but testing hooks can be added using `@nestjs/testing`, `jest`, and `supertest`.
+> Not implemented fully — but testing hooks can be added using `@nestjs/testing`, `jest`, and `supertest`.
 
 ## 🧰 Features
 

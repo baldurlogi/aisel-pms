@@ -6,12 +6,14 @@ import { RolesGuard } from './common/guards/roles.guard';
 import helmet from 'helmet';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import 'reflect-metadata';
+import cookieParser from 'cookie-parser';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   console.log('API_URL =', process.env.NEXT_PUBLIC_API_URL);
 
+  app.use(cookieParser());
   app.use(helmet());
 
   app.enableCors({
