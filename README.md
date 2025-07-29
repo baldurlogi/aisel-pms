@@ -74,6 +74,7 @@ pnpm --filter api exec prisma studio --schema=src/prisma/schema.prisma
 
 ```bash
 cd apps/api
+pnpm run clean
 pnpm run build
 pnpm run start  # Nest app on http://localhost:4000
 ```
