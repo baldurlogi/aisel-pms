@@ -66,8 +66,8 @@ pnpm --filter dtos run build
 #### DB - From root:
 
 ```bash
-pnpm --filter api exec prisma db push --schema=apps/api/src/prisma/schema.prisma
-pnpm --filter api exec prisma studio --schema=apps/api/src/prisma/schema.prisma
+pnpm --filter api exec prisma db push --schema=src/prisma/schema.prisma
+pnpm --filter api exec prisma studio --schema=src/prisma/schema.prisma
 ```
 
 #### Bakcend - From root:
