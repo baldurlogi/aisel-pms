@@ -33,7 +33,8 @@ A full-stack Patient Management System built for the Aisel technical case. It in
 ```bash
 git clone https://github.com/baldurlogi/aisel-pms.git
 cd aisel-pms
-pnpm install
+corepack enable
+pnpm install --frozen-lockfile
 ```
 
 ### 2. Create Environment Variables
@@ -52,23 +53,29 @@ DATABASE_URL="postgresql://johndoe:randompassword@localhost:5432/mydb"
 NEXT_PUBLIC_API_URL=http://localhost:4000
 ```
 
-### 3. Run Locally without Docker (for now)
+### 3. Run Locally (without Docker for now)
 
 > Note: replace pnpm with npm or yarn if preferred.
+
+#### Build shared library:
+
+```bash
+pnpm --filter dtos run build
+```
 
 #### DB - From root:
 
 ```bash
-pnpm install
-pnpm --filter api prisma db push
-pnpm --filter api prisma studio # opens at http://localhost:5555
+pnpm --filter api exec prisma db push --schema=apps/api/src/prisma/schema.prisma
+pnpm --filter api exec prisma studio --schema=apps/api/src/prisma/schema.prisma
 ```
 
 #### Bakcend - From root:
 
 ```bash
-pnpm --filter api build
-pnpm --filter api start  # Nest app on http://localhost:4000
+cd apps/api
+pnpm run build
+pnpm run start  # Nest app on http://localhost:4000
 ```
 
 #### Frontend - From root:
