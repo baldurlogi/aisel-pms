@@ -19,7 +19,7 @@ A full-stack Patient Management System built for the Aisel technical case. It in
 - **Authentication:** JWT with Passport.js
 - **Dockerized:** Multi-stage `Dockerfile`
 
-### ☁️ Cloud & DevOps *(work in progress)*
+### ☁️ Cloud & DevOps _(work in progress)_
 
 - **Backend Hosting:** Railway
 - **Database Hosting:** Railway Postgres
@@ -89,10 +89,10 @@ cd apps/api
 const bcrypt = require('bcryptjs');
 bcrypt.hashSync('<your_password>', 10);
 ```
+
 ### 2. Copy the hashed password
 
 something like: '$2b$10$HP5Bgcq4TJvw6Jxd4xB2eOO1XMh7.GAmez9f/iqNRqh0KpiPyAw8.'
-
 
 ### 3. Go to the Prisma studio (usually localhost:5555) and make a user with:
 
