@@ -94,6 +94,7 @@ pnpm --filter web dev # Next.js on http://localhost:3000
 
 ```bash
 cd apps/api
+node
 const bcrypt = require('bcryptjs');
 bcrypt.hashSync('<your_password>', 10);
 ```
