@@ -101,7 +101,7 @@ bcrypt.hashSync('<your_password>', 10);
 
 ### 2. Copy the hashed password
 
-something like: '$2b$10$HP5Bgcq4TJvw6Jxd4xB2eOO1XMh7.GAmez9f/iqNRqh0KpiPyAw8.'
+something like: $2b$10$HP5Bgcq4TJvw6Jxd4xB2eOO1XMh7.GAmez9f/iqNRqh0KpiPyAw8. (NOTE: don't include the quotation marks!)
 
 ### 3. Go to the Prisma studio (usually localhost:5555) and make a user with:
 
